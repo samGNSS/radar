@@ -1,0 +1,4 @@
+[Project]
+Name=radar
+Manager=KDevCMakeManager
+VersionControl=kdevgit
