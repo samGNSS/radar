@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sam/projects/radar/main.cpp
+iostream
+-
+fstream
+-
+boost/program_options.hpp
+-
+boost/thread.hpp
+-
+fftw3.h
+/home/sam/projects/radar/fftw3.h
+src/waveform/LFM.h
+/home/sam/projects/radar/src/waveform/LFM.h
+
+/home/sam/projects/radar/src/hardware/hackrf/scheduler.cpp
+
+/home/sam/projects/radar/src/waveform/LFM.cpp
+LFM.h
+/home/sam/projects/radar/src/waveform/LFM.h
+iostream
+-
+
+/home/sam/projects/radar/src/waveform/LFM.h
+complex
+-
+memory
+-
+
