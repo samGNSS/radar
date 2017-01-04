@@ -6,8 +6,23 @@
 },
 {
   "directory": "/home/sam/projects/radar/build",
+  "command": "/usr/bin/c++      -std=c++11 -O4 -Wall -lfftw3f -g   -o CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o -c /home/sam/projects/radar/src/signal_processing/tuneFilter.cpp",
+  "file": "/home/sam/projects/radar/src/signal_processing/tuneFilter.cpp"
+},
+{
+  "directory": "/home/sam/projects/radar/build",
+  "command": "/usr/bin/c++      -std=c++11 -O4 -Wall -lfftw3f -g   -o CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o -c /home/sam/projects/radar/src/signal_processing/correlator.cpp",
+  "file": "/home/sam/projects/radar/src/signal_processing/correlator.cpp"
+},
+{
+  "directory": "/home/sam/projects/radar/build",
   "command": "/usr/bin/c++      -std=c++11 -O4 -Wall -lfftw3f -g   -o CMakeFiles/radar.dir/src/waveform/LFM.cpp.o -c /home/sam/projects/radar/src/waveform/LFM.cpp",
   "file": "/home/sam/projects/radar/src/waveform/LFM.cpp"
+},
+{
+  "directory": "/home/sam/projects/radar/build",
+  "command": "/usr/bin/c++      -std=c++11 -O4 -Wall -lfftw3f -g   -o CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o -c /home/sam/projects/radar/src/hardware/hackrf/proc.cpp",
+  "file": "/home/sam/projects/radar/src/hardware/hackrf/proc.cpp"
 },
 {
   "directory": "/home/sam/projects/radar/build",

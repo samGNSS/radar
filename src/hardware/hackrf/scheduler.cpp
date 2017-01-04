@@ -6,5 +6,88 @@
  * 
  */
 
+#include "scheduler.h"
+#include "../../waveform/LFM.h" //wow that is really annoying
 
-//TODO: implement everything...
+using namespace hackrf;
+
+sched::sched()
+{
+  //take in params here...probaly as a struct of some sort
+}
+
+sched::~sched()
+{
+  //nothing to do for now...might call stop from here...
+  if (enabled)
+    stop();
+}
+
+
+void sched::init()
+{
+  enabled = true;
+  transmitting = false;
+  
+  //enable and chack the hardware
+}
+
+void sched::start()
+{
+  //things
+  //start all threads
+  //thread execution will be controlled with spin locks and atomic variables 
+  transmitting = true; //always begin by transmitting
+  enabled = true;
+}
+
+void sched::stop()
+{
+  enabled = false;
+  //join threads and exit
+}
+
+void sched::tx_callback()
+{
+  while(enabled){
+    while(!transmitting){usleep(1);}; //spin lock 
+    //transmit a given waveform
+    /*
+    * 
+    * TRANSMIT
+    * 
+    */
+    switch_rx_tx();
+  }
+}
+
+void sched::rx_callback()
+{
+  while(enabled){
+    while(transmitting){usleep(1);}; //spin lock
+    /*
+     * 
+     * Receive and pass to proc
+     * 
+     * 
+     */
+     switch_rx_tx(); //start transmitting agin
+  }
+}
+
+void sched::switch_rx_tx()
+{
+  //need to make calls to the hackrf driver to stop rx/tx and start the other one
+  if (transmitting){
+     //stop tx
+     //start rx
+  }
+  else{
+    //stop rx
+    //start tx
+  }
+  
+  //switch 
+  transmitting = !transmitting;
+}
+

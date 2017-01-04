@@ -20,7 +20,33 @@ fftw3.h
 src/waveform/LFM.h
 /home/sam/projects/radar/src/waveform/LFM.h
 
+/home/sam/projects/radar/src/hardware/hackrf/proc.cpp
+proc.h
+/home/sam/projects/radar/src/hardware/hackrf/proc.h
+../../waveform/LFM.h
+/home/sam/projects/radar/src/waveform/LFM.h
+
+/home/sam/projects/radar/src/hardware/hackrf/proc.h
+boost/atomic.hpp
+-
+boost/thread.hpp
+-
+
 /home/sam/projects/radar/src/hardware/hackrf/scheduler.cpp
+scheduler.h
+/home/sam/projects/radar/src/hardware/hackrf/scheduler.h
+../../waveform/LFM.h
+/home/sam/projects/radar/src/waveform/LFM.h
+
+/home/sam/projects/radar/src/hardware/hackrf/scheduler.h
+boost/atomic.hpp
+-
+boost/thread.hpp
+-
+
+/home/sam/projects/radar/src/signal_processing/correlator.cpp
+
+/home/sam/projects/radar/src/signal_processing/tuneFilter.cpp
 
 /home/sam/projects/radar/src/waveform/LFM.cpp
 LFM.h

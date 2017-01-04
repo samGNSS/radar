@@ -81,9 +81,57 @@ CMakeFiles/radar.dir/main.cpp.o.provides: CMakeFiles/radar.dir/main.cpp.o.requir
 CMakeFiles/radar.dir/main.cpp.o.provides.build: CMakeFiles/radar.dir/main.cpp.o
 
 
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o: CMakeFiles/radar.dir/flags.make
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o: ../src/signal_processing/tuneFilter.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o -c /home/sam/projects/radar/src/signal_processing/tuneFilter.cpp
+
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/projects/radar/src/signal_processing/tuneFilter.cpp > CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.i
+
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/projects/radar/src/signal_processing/tuneFilter.cpp -o CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.s
+
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.requires:
+
+.PHONY : CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.requires
+
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.provides: CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.requires
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.provides.build
+.PHONY : CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.provides
+
+CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.provides.build: CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o
+
+
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o: CMakeFiles/radar.dir/flags.make
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o: ../src/signal_processing/correlator.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o -c /home/sam/projects/radar/src/signal_processing/correlator.cpp
+
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/projects/radar/src/signal_processing/correlator.cpp > CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.i
+
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/projects/radar/src/signal_processing/correlator.cpp -o CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.s
+
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.requires:
+
+.PHONY : CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.requires
+
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.provides: CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.requires
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.provides.build
+.PHONY : CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.provides
+
+CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.provides.build: CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o
+
+
 CMakeFiles/radar.dir/src/waveform/LFM.cpp.o: CMakeFiles/radar.dir/flags.make
 CMakeFiles/radar.dir/src/waveform/LFM.cpp.o: ../src/waveform/LFM.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/radar.dir/src/waveform/LFM.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/radar.dir/src/waveform/LFM.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/radar.dir/src/waveform/LFM.cpp.o -c /home/sam/projects/radar/src/waveform/LFM.cpp
 
 CMakeFiles/radar.dir/src/waveform/LFM.cpp.i: cmake_force
@@ -105,9 +153,33 @@ CMakeFiles/radar.dir/src/waveform/LFM.cpp.o.provides: CMakeFiles/radar.dir/src/w
 CMakeFiles/radar.dir/src/waveform/LFM.cpp.o.provides.build: CMakeFiles/radar.dir/src/waveform/LFM.cpp.o
 
 
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o: CMakeFiles/radar.dir/flags.make
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o: ../src/hardware/hackrf/proc.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o -c /home/sam/projects/radar/src/hardware/hackrf/proc.cpp
+
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/projects/radar/src/hardware/hackrf/proc.cpp > CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.i
+
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/projects/radar/src/hardware/hackrf/proc.cpp -o CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.s
+
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.requires:
+
+.PHONY : CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.requires
+
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.provides: CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.requires
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.provides.build
+.PHONY : CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.provides
+
+CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.provides.build: CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o
+
+
 CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o: CMakeFiles/radar.dir/flags.make
 CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o: ../src/hardware/hackrf/scheduler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o -c /home/sam/projects/radar/src/hardware/hackrf/scheduler.cpp
 
 CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.i: cmake_force
@@ -132,26 +204,32 @@ CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o.provides.build: CMakeFi
 # Object files for target radar
 radar_OBJECTS = \
 "CMakeFiles/radar.dir/main.cpp.o" \
+"CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o" \
+"CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o" \
 "CMakeFiles/radar.dir/src/waveform/LFM.cpp.o" \
+"CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o" \
 "CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o"
 
 # External object files for target radar
 radar_EXTERNAL_OBJECTS =
 
 radar: CMakeFiles/radar.dir/main.cpp.o
+radar: CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o
+radar: CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o
 radar: CMakeFiles/radar.dir/src/waveform/LFM.cpp.o
+radar: CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o
 radar: CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o
 radar: CMakeFiles/radar.dir/build.make
 radar: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 radar: /usr/lib/x86_64-linux-gnu/libboost_system.so
 radar: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
 radar: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+radar: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
 radar: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
 radar: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-radar: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
 radar: /usr/lib/x86_64-linux-gnu/libpthread.so
 radar: CMakeFiles/radar.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable radar"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sam/projects/radar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable radar"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/radar.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -160,7 +238,10 @@ CMakeFiles/radar.dir/build: radar
 .PHONY : CMakeFiles/radar.dir/build
 
 CMakeFiles/radar.dir/requires: CMakeFiles/radar.dir/main.cpp.o.requires
+CMakeFiles/radar.dir/requires: CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o.requires
+CMakeFiles/radar.dir/requires: CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o.requires
 CMakeFiles/radar.dir/requires: CMakeFiles/radar.dir/src/waveform/LFM.cpp.o.requires
+CMakeFiles/radar.dir/requires: CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o.requires
 CMakeFiles/radar.dir/requires: CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.o.requires
 
 .PHONY : CMakeFiles/radar.dir/requires

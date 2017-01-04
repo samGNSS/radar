@@ -150,6 +150,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/hardware/hackrf/proc.o: src/hardware/hackrf/proc.cpp.o
+
+.PHONY : src/hardware/hackrf/proc.o
+
+# target to build an object file
+src/hardware/hackrf/proc.cpp.o:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.o
+.PHONY : src/hardware/hackrf/proc.cpp.o
+
+src/hardware/hackrf/proc.i: src/hardware/hackrf/proc.cpp.i
+
+.PHONY : src/hardware/hackrf/proc.i
+
+# target to preprocess a source file
+src/hardware/hackrf/proc.cpp.i:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.i
+.PHONY : src/hardware/hackrf/proc.cpp.i
+
+src/hardware/hackrf/proc.s: src/hardware/hackrf/proc.cpp.s
+
+.PHONY : src/hardware/hackrf/proc.s
+
+# target to generate assembly for a file
+src/hardware/hackrf/proc.cpp.s:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/hardware/hackrf/proc.cpp.s
+.PHONY : src/hardware/hackrf/proc.cpp.s
+
 src/hardware/hackrf/scheduler.o: src/hardware/hackrf/scheduler.cpp.o
 
 .PHONY : src/hardware/hackrf/scheduler.o
@@ -176,6 +203,60 @@ src/hardware/hackrf/scheduler.s: src/hardware/hackrf/scheduler.cpp.s
 src/hardware/hackrf/scheduler.cpp.s:
 	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/hardware/hackrf/scheduler.cpp.s
 .PHONY : src/hardware/hackrf/scheduler.cpp.s
+
+src/signal_processing/correlator.o: src/signal_processing/correlator.cpp.o
+
+.PHONY : src/signal_processing/correlator.o
+
+# target to build an object file
+src/signal_processing/correlator.cpp.o:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.o
+.PHONY : src/signal_processing/correlator.cpp.o
+
+src/signal_processing/correlator.i: src/signal_processing/correlator.cpp.i
+
+.PHONY : src/signal_processing/correlator.i
+
+# target to preprocess a source file
+src/signal_processing/correlator.cpp.i:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.i
+.PHONY : src/signal_processing/correlator.cpp.i
+
+src/signal_processing/correlator.s: src/signal_processing/correlator.cpp.s
+
+.PHONY : src/signal_processing/correlator.s
+
+# target to generate assembly for a file
+src/signal_processing/correlator.cpp.s:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/correlator.cpp.s
+.PHONY : src/signal_processing/correlator.cpp.s
+
+src/signal_processing/tuneFilter.o: src/signal_processing/tuneFilter.cpp.o
+
+.PHONY : src/signal_processing/tuneFilter.o
+
+# target to build an object file
+src/signal_processing/tuneFilter.cpp.o:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.o
+.PHONY : src/signal_processing/tuneFilter.cpp.o
+
+src/signal_processing/tuneFilter.i: src/signal_processing/tuneFilter.cpp.i
+
+.PHONY : src/signal_processing/tuneFilter.i
+
+# target to preprocess a source file
+src/signal_processing/tuneFilter.cpp.i:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.i
+.PHONY : src/signal_processing/tuneFilter.cpp.i
+
+src/signal_processing/tuneFilter.s: src/signal_processing/tuneFilter.cpp.s
+
+.PHONY : src/signal_processing/tuneFilter.s
+
+# target to generate assembly for a file
+src/signal_processing/tuneFilter.cpp.s:
+	$(MAKE) -f CMakeFiles/radar.dir/build.make CMakeFiles/radar.dir/src/signal_processing/tuneFilter.cpp.s
+.PHONY : src/signal_processing/tuneFilter.cpp.s
 
 src/waveform/LFM.o: src/waveform/LFM.cpp.o
 
@@ -216,9 +297,18 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/hardware/hackrf/proc.o"
+	@echo "... src/hardware/hackrf/proc.i"
+	@echo "... src/hardware/hackrf/proc.s"
 	@echo "... src/hardware/hackrf/scheduler.o"
 	@echo "... src/hardware/hackrf/scheduler.i"
 	@echo "... src/hardware/hackrf/scheduler.s"
+	@echo "... src/signal_processing/correlator.o"
+	@echo "... src/signal_processing/correlator.i"
+	@echo "... src/signal_processing/correlator.s"
+	@echo "... src/signal_processing/tuneFilter.o"
+	@echo "... src/signal_processing/tuneFilter.i"
+	@echo "... src/signal_processing/tuneFilter.s"
 	@echo "... src/waveform/LFM.o"
 	@echo "... src/waveform/LFM.i"
 	@echo "... src/waveform/LFM.s"

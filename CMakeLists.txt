@@ -10,7 +10,7 @@ add_executable(radar main.cpp ${sources})
 
 # this defines the variables Boost_LIBRARIES that contain all library names
 # that we need to link to
-find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread REQUIRED)
+find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread atomic REQUIRED)
 find_package(Volk REQUIRED)
 
 target_link_libraries(radar PUBLIC
