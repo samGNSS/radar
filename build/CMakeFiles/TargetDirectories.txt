@@ -1,3 +1,0 @@
-/home/sam/projects/radar/build/CMakeFiles/rebuild_cache.dir
-/home/sam/projects/radar/build/CMakeFiles/edit_cache.dir
-/home/sam/projects/radar/build/CMakeFiles/radar.dir
