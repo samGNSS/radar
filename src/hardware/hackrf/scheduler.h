@@ -22,7 +22,7 @@ namespace hackrf{
     private:
       //buffers and things...
       boost::atomic<bool> enabled,transmitting; //thread controls
-    
+      boost::thread rx_thread,tx_thread;
   };
 }
 

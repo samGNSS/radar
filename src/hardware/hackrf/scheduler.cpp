@@ -8,6 +8,7 @@
 
 #include "scheduler.h"
 #include "../../waveform/LFM.h" //wow that is really annoying
+#include "driver/hackrf.h"
 
 using namespace hackrf;
 
@@ -37,13 +38,19 @@ void sched::start()
   //things
   //start all threads
   //thread execution will be controlled with spin locks and atomic variables 
-  transmitting = true; //always begin by transmitting
   enabled = true;
+  this->rx_thread = boost::thread(boost::bind(&sched::rx_callback, this));
+  this->tx_thread = boost::thread(boost::bind(&sched::tx_callback, this));
+  transmitting = true; //always begin by transmitting
+  
+  
 }
 
 void sched::stop()
 {
   enabled = false;
+  rx_thread.join();
+  tx_thread.join();
   //join threads and exit
 }
 
