@@ -8,9 +8,14 @@
 //TODO: implement some kind of common time base, could use the system time but it seems bad...
 //could be worth it to write a wrapper that waits until its time to transmit/record simular to uhd::transmit/recv processes
 namespace hackrf{
+  
+  typedef struct{
+    float center_freq;
+  }device_params;
+  
   class sched{
     public:
-      sched();
+      sched(device_params device_options);
       ~sched();
       void init();          //init hardware
       void start();         //start threads

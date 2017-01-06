@@ -25,7 +25,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 #include <stdlib.h>
 
-#include <libusb.h>
+#include <libusb-1.0/libusb.h>
 #include <pthread.h>
 
 #ifndef bool

@@ -9,10 +9,11 @@
 #include "scheduler.h"
 #include "../../waveform/LFM.h" //wow that is really annoying
 #include "driver/hackrf.h"
+#include <iostream>
 
 using namespace hackrf;
 
-sched::sched()
+sched::sched(device_params device_options)
 {
   //take in params here...probaly as a struct of some sort
 }
@@ -30,7 +31,12 @@ void sched::init()
   enabled = true;
   transmitting = false;
   
-  //enable and chack the hardware
+  //enable and check the hardware
+  int result = hackrf_init();
+  if (result != HACKRF_SUCCESS){
+    std::cout << "No device found...stopping..." << std::endl;
+    this->stop();
+  }
 }
 
 void sched::start()
@@ -51,7 +57,7 @@ void sched::stop()
   enabled = false;
   rx_thread.join();
   tx_thread.join();
-  //join threads and exit
+  //join threads
 }
 
 void sched::tx_callback()
@@ -64,7 +70,7 @@ void sched::tx_callback()
     * TRANSMIT
     * 
     */
-    switch_rx_tx();
+    switch_rx_tx(); //start receiving
   }
 }
 
