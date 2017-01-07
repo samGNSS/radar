@@ -29,7 +29,6 @@ namespace hackrf{
       //hackrf variables
       const device_params* frontEnd;
       hackrf_device* hackrf; 		//device pointer
-      hackrf_device_list_t* listHackrf; //list of hackrfs connected to the computer
       LFM* waveGen;
       
       

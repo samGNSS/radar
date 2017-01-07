@@ -13,17 +13,12 @@ namespace hackrf{
   
   inline int set_up_device(const device_params* frontEnd,hackrf_device* device){
       //set sample rate
-      int ret = hackrf_set_sample_rate_manual(device,frontEnd->sampRate,(float)frontEnd->sampRate/1e6);
+      int ret = hackrf_set_sample_rate_manual(device,frontEnd->sampRate,1);
       if (ret != HACKRF_SUCCESS)
 	return -1;
       
       //set filter bandwidth
       ret = hackrf_set_baseband_filter_bandwidth(device, frontEnd->baseBandFiltBw);
-      if (ret != HACKRF_SUCCESS)
-	return -1;
-      
-      //set center frequency
-      ret = hackrf_set_freq(device, frontEnd->centerFreq);
       if (ret != HACKRF_SUCCESS)
 	return -1;
       
