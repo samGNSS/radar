@@ -11,10 +11,9 @@
 
 using namespace hackrf;
 
-sched::sched(device_params* device_options)
+sched::sched(const device_params* device_options)
 {
-  //take in params here...probaly as a struct of some sort
-  this->frontEnd = device_options;
+  frontEnd = device_options;
 }
 
 sched::~sched()
@@ -45,7 +44,8 @@ void sched::init()
   }
   
   //set up device front end
-  set_up_device(frontEnd,hackrf);
+  result = set_up_device(this->frontEnd,hackrf);
+  if (result == -1){std::exit(-1);}
   
   //device is set up, start the radar!
   this->start();
