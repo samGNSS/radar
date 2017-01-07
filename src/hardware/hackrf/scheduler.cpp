@@ -8,14 +8,14 @@
 
 #include "scheduler.h"
 #include "../../waveform/LFM.h" //wow that is really annoying
-#include "driver/hackrf.h"
 #include <iostream>
 
 using namespace hackrf;
 
-sched::sched(device_params device_options)
+sched::sched(device_params* device_options)
 {
   //take in params here...probaly as a struct of some sort
+  this->frontEnd = device_options;
 }
 
 sched::~sched()
@@ -35,8 +35,22 @@ void sched::init()
   int result = hackrf_init();
   if (result != HACKRF_SUCCESS){
     std::cout << "No device found...stopping..." << std::endl;
-    this->stop();
+    std::exit(-1);
   }
+  
+  listHackrf = hackrf_device_list(); //get a list of hackrf devices
+  result = hackrf_device_list_open(listHackrf,0,&hackrf);
+    if (result != HACKRF_SUCCESS){
+    std::cout << "Failed to open the device...stopping..." << std::endl;
+    std::exit(-1);
+  }
+  
+  //set up device front end
+  set_up_device(frontEnd,hackrf);
+  
+  //device is set up, start the radar!
+  this->start();
+  
 }
 
 void sched::start()
@@ -45,8 +59,8 @@ void sched::start()
   //start all threads
   //thread execution will be controlled with spin locks and atomic variables 
   enabled = true;
-  this->rx_thread = boost::thread(boost::bind(&sched::rx_callback, this));
-  this->tx_thread = boost::thread(boost::bind(&sched::tx_callback, this));
+  this->rx_thread = boost::thread(boost::bind(&sched::rx_callback_control, this));
+  this->tx_thread = boost::thread(boost::bind(&sched::tx_callback_control, this));
   transmitting = true; //always begin by transmitting
   
   
@@ -60,7 +74,7 @@ void sched::stop()
   //join threads
 }
 
-void sched::tx_callback()
+void sched::tx_callback_control()
 {
   while(enabled){
     while(!transmitting){usleep(1);}; //spin lock 
@@ -70,11 +84,21 @@ void sched::tx_callback()
     * TRANSMIT
     * 
     */
+    int ret = hackrf_start_tx(hackrf, tx_callback, NULL);
+    if (ret != HACKRF_SUCCESS){
+      std::cout << "Failed to start tx...stopping...." << std::endl;
+      this->stop();
+    }
     switch_rx_tx(); //start receiving
   }
 }
 
-void sched::rx_callback()
+int sched::tx_callback(hackrf_transfer* transfer)
+{
+  return 0;
+}
+
+void sched::rx_callback_control()
 {
   while(enabled){
     while(transmitting){usleep(1);}; //spin lock
@@ -84,20 +108,31 @@ void sched::rx_callback()
      * 
      * 
      */
-     switch_rx_tx(); //start transmitting agin
+    int ret = hackrf_start_rx(hackrf, &rx_callback, NULL);
+    if (ret != HACKRF_SUCCESS){
+	std::cout << "Failed to start rx...stopping...." << std::endl;
+	this->stop();
+      }
+    switch_rx_tx(); //start transmitting agin
   }
+}
+
+int sched::rx_callback(hackrf_transfer* transfer)
+{
+ //do stuff
+  return 0;
 }
 
 void sched::switch_rx_tx()
 {
   //need to make calls to the hackrf driver to stop rx/tx and start the other one
   if (transmitting){
-     //stop tx
-     //start rx
+      while((hackrf_is_streaming(hackrf) == HACKRF_TRUE) && enabled){usleep(1);}; //spin lock
+      hackrf_stop_tx(hackrf);
   }
   else{
-    //stop rx
-    //start tx
+      while((hackrf_is_streaming(hackrf) == HACKRF_TRUE) && enabled){usleep(1);}; //spin lock
+      hackrf_stop_rx(hackrf);
   }
   
   //switch 

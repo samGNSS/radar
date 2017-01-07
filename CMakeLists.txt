@@ -14,7 +14,7 @@ find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread ato
 find_package(Volk REQUIRED)
 
 
-#libusb bullshit
+#libusb bullshit    
 IF (NOT WIN32)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
@@ -37,7 +37,6 @@ include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBUSB DEFAULT_MSG LIBUSB_LIBRARIES LIBUSB_INCLUDE_DIR)
 
 MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
-
 
 # find_package(libusb-1.0 REQUIRED)
 
