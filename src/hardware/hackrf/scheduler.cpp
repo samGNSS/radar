@@ -7,7 +7,6 @@
  */
 
 #include "scheduler.h"
-#include "../../waveform/LFM.h" //wow that is really annoying
 #include <iostream>
 
 using namespace hackrf;

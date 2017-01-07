@@ -5,6 +5,8 @@
 #include <boost/thread.hpp>
 #include "driver/hackrf.h"
 #include "driver/device_setup.h"
+#include "../../waveform/LFM.h" //wow that is really annoying
+
 
 //could just make this a base class and change the init stuff for different hardware...
 //TODO: implement some kind of common time base, could use the system time but it seems bad...
@@ -29,7 +31,7 @@ namespace hackrf{
       device_params frontEnd;
       hackrf_device* hackrf; 		//device pointer
       hackrf_device_list_t* listHackrf; //list of hackrfs connected to the computer
-      
+      LFM waveGen;
       
       
       //buffers and things...
