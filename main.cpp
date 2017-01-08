@@ -1,11 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <boost/program_options.hpp>
-#include <boost/thread.hpp>
+// #include <boost/thread.hpp>
 #include "fftw3.h"
 #include "src/waveform/LFM.h"
-#include "src/hardware/hackrf/driver/device_setup.h"
 #include "src/hardware/hackrf/scheduler.h"
+#include "src/hardware/hackrf/driver/device_setup.h"
+
 namespace po = boost::program_options;
 int main(int argc, char **argv) {
     //variables to be set by po
@@ -23,28 +24,29 @@ int main(int argc, char **argv) {
 	("baseBandFilerBw", po::value<uint32_t>(&filterBw)->default_value(rate/2), "baseband filter bandwidth (Hz)")
 	("rxVgaGain", po::value<uint32_t>(&rxVgaGain)->default_value(8), "rx gain")
 	("rxLnaGain", po::value<uint32_t>(&rxLnaGain)->default_value(8), "rx lna gain")
-	("txVgaGain", po::value<uint32_t>(&txVgaGain)->default_value(8), "tx gain")
+	("txVgaGain", po::value<uint32_t>(&txVgaGain)->default_value(0), "tx gain")
 	("centerFreq", po::value<uint64_t>(&centerFreq)->default_value(2.45e9), "center frequency (Hz)")
     ;
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
     
-    
-    //eventually put a switch here to use different hardware like usrps...
-    hackrf::device_params frontEnd = {centerFreq,
-			      rate,
-			      filterBw,
-			      rxVgaGain,
-			      rxLnaGain,
-			      txVgaGain};
+    const hackrf::device_params frontEnd = hackrf::device_params{centerFreq,
+								 rate,
+								 filterBw,
+								 rxVgaGain,
+								 rxLnaGain,
+								 txVgaGain};
 
+    std::cout << frontEnd.centerFreq << std::endl;
 			      
     //start radar class
-    hackrf::sched radarSched = hackrf::sched(frontEnd);
-    radarSched.init();
-    radarSched.start(); 
-			      
+    hackrf::sched* radarSched = new hackrf::sched(&frontEnd);
+    radarSched->init();
+    radarSched->start(); 
+
+    usleep(2000000);
+    radarSched->~sched();
 			      
 			      
     std::cout << "Testing LFM generation" << std::endl;

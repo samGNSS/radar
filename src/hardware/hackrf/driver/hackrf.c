@@ -633,6 +633,7 @@ int ADDCALL hackrf_set_transceiver_mode(hackrf_device* device, hackrf_transceive
 
 	if( result != 0 )
 	{
+	  printf("Libusb error code: %d\n",result);
 		return HACKRF_ERROR_LIBUSB;
 	} else {
 		return HACKRF_SUCCESS;
@@ -1474,6 +1475,7 @@ int ADDCALL hackrf_start_rx(hackrf_device* device, hackrf_sample_block_cb_fn cal
 	int result;
 	const uint8_t endpoint_address = LIBUSB_ENDPOINT_IN | 1;
 	result = hackrf_set_transceiver_mode(device, HACKRF_TRANSCEIVER_MODE_RECEIVE);
+	
 	if( result == HACKRF_SUCCESS )
 	{
 		device->rx_ctx = rx_ctx;

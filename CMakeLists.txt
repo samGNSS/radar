@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(radar)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O4 -Wall -lusb -lfftw3f")
 file(GLOB_RECURSE sources ./src/*.cpp ./src/*.c ./src/*.h)
-
+ 
 add_executable(radar main.cpp ${sources})
 ###############################################################################
 ## dependencies ###############################################################
@@ -37,8 +37,6 @@ include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBUSB DEFAULT_MSG LIBUSB_LIBRARIES LIBUSB_INCLUDE_DIR)
 
 MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
-
-# find_package(libusb-1.0 REQUIRED)
 
 target_link_libraries(radar PUBLIC
   ${Boost_LIBRARIES}
