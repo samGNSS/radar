@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     radarSched->start(); 
 
     usleep(2000000);
-    radarSched->stop();
+    radarSched->~sched();
 			      
 			      
     std::cout << "Testing LFM generation" << std::endl;
