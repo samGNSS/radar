@@ -11,10 +11,22 @@
 
 
 using namespace hackrf;
+LFM::charBuffPtr sched::tx_wave;
+proc* sched::pro;
 
 sched::sched(const device_params* device_options)
 {
   frontEnd = device_options;
+  
+  //get the tx waveform, narrow band chirp
+  waveGen = new LFM((float) device_options->sampRate,
+		    (int) 10000,
+		    (float) 50000,
+		    (float) 100000);
+  waveGen->genWave();
+  tx_wave = waveGen->getCharBuff();
+  
+  pro = new proc();
 }
 
 sched::~sched()
@@ -36,8 +48,8 @@ void sched::init()
     std::exit(-1);
   }
   
-  result = hackrf_open_by_serial("292561cf", &hackrf);
-    if (result != HACKRF_SUCCESS){
+  result = hackrf_open(&hackrf);
+  if (result != HACKRF_SUCCESS){
     std::cout << "Failed to open the device...stopping..." << std::endl;
     std::exit(-1);
   }
@@ -53,29 +65,31 @@ void sched::start()
   //things
   //start all threads
   //thread execution will be controlled with spin locks and atomic variables 
-  enabled = true;
-  transmitting = true; //always begin by transmitting
-  this->rx_thread = boost::thread(boost::bind(&sched::rx_callback_control, this));
-  this->tx_thread = boost::thread(boost::bind(&sched::tx_callback_control, this));
-  int ret = hackrf_start_tx(hackrf, &sched::tx_callback, (void *) this);
+  int ret = hackrf_start_rx(hackrf, &sched::tx_callback, (void *) this);
   if (ret != HACKRF_SUCCESS){
     std::cout << "Failed to start tx with error code: " << ret << " stopping" << std::endl;
     hackrf_exit();
     std::exit(-1);
   };
+  
+  
+  enabled = true;
+  transmitting = true; //always begin by transmitting
+  this->rx_thread = boost::thread(boost::bind(&sched::rx_callback_control, this));
+  this->tx_thread = boost::thread(boost::bind(&sched::tx_callback_control, this));
+
 }
 
 void sched::stop()
 {
   enabled = false;
   rx_thread.join();
-  tx_thread.join();
+//   tx_thread.join();
   //join threads
 }
 
 void sched::tx_callback_control()
 {
-  int count = 0;
   while(enabled){
     while(!transmitting){usleep(1);}; //spin lock 
     //transmit a given waveform
@@ -84,24 +98,22 @@ void sched::tx_callback_control()
     * TRANSMIT
     * 
     */
-    std::cout << "\t" << count << std::endl;
-    count++;
+    boost::this_thread::sleep(boost::posix_time::seconds(1));
 
-    std::cout << count << std::endl;
-    std::cout << "tx started" << std::endl; 
     switch_rx_tx(); //start receiving
-    while(transmitting){usleep(1);}; //spin lock
   }
 }
 
 int sched::tx_callback(hackrf_transfer* transfer)
 {
+  std::cout << "In tx_callback" << std::endl;
+  int numSamps = transfer->valid_length < 10000 ? transfer->valid_length : 10000;
+  std::copy(&tx_wave[0],&tx_wave[numSamps],&transfer->buffer[0]);
   return 0;
 }
 
 void sched::rx_callback_control()
 {
-  int count = 0;
   while(enabled){
     while(transmitting){usleep(1);}; //spin lock
     /*
@@ -110,52 +122,60 @@ void sched::rx_callback_control()
      * 
      * 
      */
-    std::cout << "\t" << count << std::endl;
-
-    std::cout << "Rx started" << std::endl; 
-
+    boost::this_thread::sleep(boost::posix_time::seconds(1));
     switch_rx_tx(); //start transmitting agin
-    while(!transmitting){usleep(1);}; //spin lock
+//     while(!transmitting){usleep(1);}; //spin lock
   }
-  std::cout << "Not enabled" << std::endl; 
 }
 
 int sched::rx_callback(hackrf_transfer* transfer)
 {
- //do stuff
-  return 0;
+  //do stuff
+  std::cout << "In rx_callback" << std::endl;
+  pro->write_bin(transfer);
+  return -1;
+}
+
+void sched::reopen_device(){
+  int result = hackrf_open(&hackrf);
+  if (result != HACKRF_SUCCESS){
+  std::cout << "Failed to reopen device with error code: " << result << " stopping" << std::endl;
+    hackrf_exit();
+    std::exit(-1);
+  };
 }
 
 void sched::switch_rx_tx()
 {
   //need to make calls to the hackrf driver to stop rx/tx and start the other one
   if (transmitting){
-      while((hackrf_is_streaming(hackrf) == HACKRF_TRUE) && enabled){usleep(1);}; //spin lock
-      hackrf_stop_tx(hackrf);
-      std::cout << "Stopped tx" << std::endl;
-      hackrf_close(hackrf);
-      this->init();
-      int ret = hackrf_start_rx(hackrf, &sched::rx_callback, (void *) this);
-      if (ret != HACKRF_SUCCESS){
-	std::cout << "Failed to start rx with error code: " << ret << " stopping" << std::endl;
-	hackrf_exit();
-	std::exit(-1);
-      }
-      std::cout << "started rx" << std::endl;
-
+    //might drop samples...
+    hackrf_stop_tx(hackrf);
+    std::cout << "Stopped tx" << std::endl;
+    hackrf_close(hackrf);
+    this->reopen_device();
+    int ret = hackrf_start_rx(hackrf, &sched::rx_callback, (void *) this);
+    if (ret != HACKRF_SUCCESS){
+      std::cout << "Failed to start rx with error code: " << ret << " stopping" << std::endl;
+      hackrf_exit();
+      std::exit(-1);
+    }
+    std::cout << "started rx" << std::endl;
   }
   else{
-//       while((hackrf_is_streaming(hackrf) == HACKRF_TRUE) && enabled){usleep(1);}; //spin lock
-      hackrf_stop_rx(hackrf);
-      std::cout << "Stopped rx" << std::endl;
-      hackrf_close(hackrf);
-      this->init();
-      int ret = hackrf_start_tx(hackrf, &sched::tx_callback, (void *) this);
-      if (ret != HACKRF_SUCCESS){
-	std::cout << "Failed to start tx with error code: " << ret << " stopping" << std::endl;
-	hackrf_exit();
-	std::exit(-1);
-      }
+    //might drop samples
+    hackrf_stop_rx(hackrf);
+    std::cout << "Stopped rx" << std::endl;
+    hackrf_close(hackrf);
+    this->reopen_device();
+    int ret = hackrf_start_tx(hackrf, &sched::tx_callback, (void *) this);
+    if (ret != HACKRF_SUCCESS){
+      std::cout << "Failed to start tx with error code: " << ret << " stopping" << std::endl;
+      hackrf_exit();
+      std::exit(-1);
+    }
+    std::cout << "started tx" << std::endl;
+
   }
   std::cout << "Switched" << std::endl;
   //switch 

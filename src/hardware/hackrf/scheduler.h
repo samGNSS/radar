@@ -5,6 +5,7 @@
 #include <boost/thread.hpp>
 #include "driver/hackrf.h"
 #include "driver/device_setup.h"
+#include "proc.h"
 #include "../../waveform/LFM.h" //wow that is really annoying
 
 
@@ -23,16 +24,18 @@ namespace hackrf{
       static int tx_callback(hackrf_transfer* transfer);
       void rx_callback_control();   //handle rx
       static int rx_callback(hackrf_transfer* transfer);
+      void reopen_device();
       void switch_rx_tx();  //switch the hardware to either transmit or receive
       
     private:
       //hackrf variables
       const device_params* frontEnd;
       hackrf_device* hackrf; 		//device pointer
-      LFM* waveGen;
-      
       
       //buffers and things...
+      static proc* pro;
+      LFM* waveGen;
+      static LFM::charBuffPtr tx_wave;
       boost::atomic<bool> enabled,transmitting; //thread controls
       boost::thread rx_thread,tx_thread;
   };

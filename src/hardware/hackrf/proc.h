@@ -1,8 +1,10 @@
 #ifndef __HACKRF_PROC_H__
 #define __HACKRF_PROC_H__
 
-#include <boost/atomic.hpp>
-#include <boost/thread.hpp>
+#include "driver/hackrf.h"
+
+// #include <boost/atomic.hpp>
+// #include <boost/thread.hpp>
 
 //this one will be more complicated. Basic execution flow
 /*
@@ -25,6 +27,7 @@ class proc{
     void corr_proc(); //correlate the samples against a matched filter and look for peaks
     void time_freq_map(); //spectrogram
     void time_dis_map();  //when and where are the detections
+    void write_bin(hackrf_transfer* transfer);
     
   private:
     //things

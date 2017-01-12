@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	("baseBandFilerBw", po::value<uint32_t>(&filterBw)->default_value(rate/2), "baseband filter bandwidth (Hz)")
 	("rxVgaGain", po::value<uint32_t>(&rxVgaGain)->default_value(8), "rx gain")
 	("rxLnaGain", po::value<uint32_t>(&rxLnaGain)->default_value(8), "rx lna gain")
-	("txVgaGain", po::value<uint32_t>(&txVgaGain)->default_value(0), "tx gain")
+	("txVgaGain", po::value<uint32_t>(&txVgaGain)->default_value(32), "tx gain")
 	("centerFreq", po::value<uint64_t>(&centerFreq)->default_value(2.45e9), "center frequency (Hz)")
     ;
     po::variables_map vm;
@@ -45,27 +45,32 @@ int main(int argc, char **argv) {
     radarSched->init();
     radarSched->start(); 
 
-    usleep(2000000);
+    usleep(3000000);
     radarSched->~sched();
 			      
 			      
     std::cout << "Testing LFM generation" << std::endl;
     
     std::cout << "getting class" << std::endl;
-    LFM* chirpGen = new LFM(rate,rate*duration,rate/100,0); 
+    LFM* chirpGen = new LFM((float) rate,
+		    (int) 10000,
+		    (float) 50000,
+		    (float) 100000);
     
     std::cout << "generating chirp" << std::endl;
     chirpGen->genWave();
     
     std::cout << "getting buffer" << std::endl;
-    std::complex<float>* wave = chirpGen->getBuff();
-   
+    std::complex<float>* wave = chirpGen->getFloatBuff();
+    uint8_t* wave2 = chirpGen->getCharBuff();	
+
     
     std::cout << "writing binary file" << std::endl;
     std::ofstream outFid;
     outFid.open("chirp.bin",std::ios::binary);
-    outFid.write((const char*)&wave[0],sizeof(std::complex<float>)*10000);
+    outFid.write((const char*)&wave2[0],10000);
     outFid.close();
-     chirpGen->~LFM();
+//     uint8_t* wave2 = chirpGen->getCharBuff();	
+    chirpGen->~LFM();
     return 0;
 }

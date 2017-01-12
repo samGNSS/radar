@@ -7,16 +7,21 @@
 #include <memory>
 
 class LFM{
-    typedef std::complex<float>* floatBuffPtr;
-
 public:
+    typedef std::complex<float>* floatBuffPtr;
+    typedef uint8_t* charBuffPtr; 
+    
+    
     LFM(float sample_rate,int chirp_length,float band_width,float center_frequency);
     ~LFM();
     void genWave();
-    floatBuffPtr getBuff();
+    floatBuffPtr getFloatBuff();
+    charBuffPtr getCharBuff();
     
 private:
     floatBuffPtr waveBuff;
+    charBuffPtr  charBuff;
+
     float d_sampRate;
     float d_numSamps;
     float d_bandWidth;
