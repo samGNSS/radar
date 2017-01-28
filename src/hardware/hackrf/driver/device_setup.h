@@ -27,7 +27,6 @@ namespace hackrf{
       if (ret != HACKRF_SUCCESS)
 	return -1;
       
-      
       //set rx gains
       ret = hackrf_set_vga_gain(device, frontEnd->rxVgaGain);
       ret |= hackrf_set_lna_gain(device, frontEnd->rxLnaGain);

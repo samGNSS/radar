@@ -4,7 +4,7 @@
 #define PI_PI 6.283185307179586 //two pi
 
 LFM::LFM(float sample_rate,int chirp_length,float band_width,float center_frequency):d_sampRate(sample_rate),d_numSamps(chirp_length),d_bandWidth(band_width),d_centerFreq(center_frequency){
-    d_time = d_numSamps/d_sampRate;
+    d_time = (float)d_numSamps/d_sampRate;
     startFreq = d_centerFreq - d_bandWidth/2;
     rate = 10*d_time;
     waveBuff = (floatBuffPtr)std::malloc(sizeof(floatBuffPtr)*d_numSamps); //complex

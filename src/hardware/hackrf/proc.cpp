@@ -28,6 +28,7 @@ void proc::corr_proc()
 
 void proc::time_freq_map()
 {
+  //Short time fourier analysis
   //things
 }
 

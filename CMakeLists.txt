@@ -42,7 +42,5 @@ target_link_libraries(radar PUBLIC
   ${Boost_LIBRARIES}
   ${Volk_LIBRARIES}
   ${LIBUSB_LIBRARIES}
-  
-  # here you can add any library dependencies
-)
+ )
 

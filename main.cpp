@@ -53,9 +53,9 @@ int main(int argc, char **argv) {
     
     std::cout << "getting class" << std::endl;
     LFM* chirpGen = new LFM((float) rate,
-		    (int) 10000,
-		    (float) 50000,
-		    (float) 100000);
+			    (int) 10000,
+			    (float) 50000,
+			    (float) 100000);
     
     std::cout << "generating chirp" << std::endl;
     chirpGen->genWave();

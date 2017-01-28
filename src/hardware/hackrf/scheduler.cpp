@@ -82,24 +82,16 @@ void sched::start()
 
 void sched::stop()
 {
+  //join threads
   enabled = false;
   rx_thread.join();
-//   tx_thread.join();
-  //join threads
+  tx_thread.join();
 }
 
 void sched::tx_callback_control()
 {
   while(enabled){
     while(!transmitting){usleep(1);}; //spin lock 
-    //transmit a given waveform
-    /*
-    * 
-    * TRANSMIT
-    * 
-    */
-    boost::this_thread::sleep(boost::posix_time::seconds(1));
-
     switch_rx_tx(); //start receiving
   }
 }
@@ -116,15 +108,7 @@ void sched::rx_callback_control()
 {
   while(enabled){
     while(transmitting){usleep(1);}; //spin lock
-    /*
-     * 
-     * Receive and pass to proc
-     * 
-     * 
-     */
-    boost::this_thread::sleep(boost::posix_time::seconds(1));
     switch_rx_tx(); //start transmitting agin
-//     while(!transmitting){usleep(1);}; //spin lock
   }
 }
 
