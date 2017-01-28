@@ -11,11 +11,14 @@
 
 
 using namespace hackrf;
-LFM::charBuffPtr sched::tx_wave;
+std::vector<radar::charBuffPtr> sched::tx_wave;
 proc* sched::pro;
 
 sched::sched(const device_params* device_options)
 {
+  //TODO: add ability to specify number of IQ buffers
+  tx_wave.resize(1);
+  
   frontEnd = device_options;
   
   //get the tx waveform, narrow band chirp
@@ -24,7 +27,7 @@ sched::sched(const device_params* device_options)
 		    (float) 50000,
 		    (float) 100000);
   waveGen->genWave();
-  tx_wave = waveGen->getCharBuff();
+  tx_wave[0] = waveGen->getCharBuff();
   
   pro = new proc();
 }
@@ -100,7 +103,7 @@ int sched::tx_callback(hackrf_transfer* transfer)
 {
   std::cout << "In tx_callback" << std::endl;
   int numSamps = transfer->valid_length < 10000 ? transfer->valid_length : 10000;
-  std::copy(&tx_wave[0],&tx_wave[numSamps],&transfer->buffer[0]);
+  std::memcpy(tx_wave[0].get(),&transfer->buffer[0],numSamps);
   return 0;
 }
 

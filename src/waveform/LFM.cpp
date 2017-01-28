@@ -3,40 +3,39 @@
 
 #define PI_PI 6.283185307179586 //two pi
 
-LFM::LFM(float sample_rate,int chirp_length,float band_width,float center_frequency):d_sampRate(sample_rate),d_numSamps(chirp_length),d_bandWidth(band_width),d_centerFreq(center_frequency){
+/*
+ * TODO
+ * -add pri - pretty sure this is pulse repition index => number of pulses in the buffer
+ * -add pulse width - obvious
+ * -add duty cycle - also obvious
+ * 
+ */
+
+LFM::LFM(float sample_rate,int chirp_length,float band_width,float center_frequency):d_sampRate(sample_rate),d_numSamps(chirp_length),d_bandWidth(band_width),d_centerFreq(center_frequency)
+{
     d_time = (float)d_numSamps/d_sampRate;
     startFreq = d_centerFreq - d_bandWidth/2;
     rate = 10*d_time;
-    waveBuff = (floatBuffPtr)std::malloc(sizeof(floatBuffPtr)*d_numSamps); //complex
-    charBuff = (charBuffPtr)std::malloc(sizeof(charBuffPtr)*d_numSamps*2); //not complex
+    
+    waveBuff = std::shared_ptr<floatBuff>(new floatBuff[(int)d_numSamps],std::default_delete<floatBuff[]>());
+    charWave = std::shared_ptr<charBuff>(new charBuff[2*(int)d_numSamps],std::default_delete<charBuff[]>());
 }
 
-LFM::~LFM(){
-    std::free(waveBuff);
-    std::free(charBuff);
-}
+LFM::~LFM(){}
 
 void LFM::genWave(){
     for (int i = 0;i<d_numSamps;i++){
         float instFreq = ((startFreq+(rate/2)*i)*i)/d_sampRate;
-        waveBuff[i] = std::complex<float>(cos(PI_PI*instFreq),sin(PI_PI*instFreq));
-	charBuff[i] = (uint8_t)cos(PI_PI*instFreq);
-	charBuff[i+1] = (uint8_t)sin(PI_PI*instFreq);
+        waveBuff.get()[i] = std::complex<float>(cos(PI_PI*instFreq),sin(PI_PI*instFreq));
+	charWave.get()[i] = (uint8_t)cos(PI_PI*instFreq);
+	charWave.get()[i+1] = (uint8_t)sin(PI_PI*instFreq);
     }    
 }
 
-LFM::floatBuffPtr LFM::getFloatBuff(){
-    floatBuffPtr retVec = (floatBuffPtr)std::malloc(sizeof(floatBuffPtr)*d_numSamps);
-    std::copy(&waveBuff[0],&waveBuff[(int)d_numSamps-1],&retVec[0]);
-    return retVec;
+floatBuffPtr LFM::getFloatBuff(){
+     return std::make_shared<floatBuff>(*waveBuff);
 }
 
-LFM::charBuffPtr LFM::getCharBuff(){
-    std::cout << "Allocating" << std::endl;
-    charBuffPtr retVec = (charBuffPtr)std::malloc(sizeof(charBuffPtr)*d_numSamps*2);
-    std::cout << "Done allocating" << std::endl;
-    std::cout << "Copying" << std::endl;
-    std::copy(&charBuff[0],&charBuff[(int)(d_numSamps*2)-1],&retVec[0]);
-    std::cout << "Done copying" << std::endl;
-    return retVec;
+charBuffPtr LFM::getCharBuff(){
+    return std::make_shared<charBuff>(*charWave);
 }

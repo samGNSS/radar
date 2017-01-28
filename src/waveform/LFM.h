@@ -6,12 +6,12 @@
 #include <complex>
 #include <memory>
 
+#include "../util/radarDataTypes.h"
+
+using namespace radar;
+
 class LFM{
 public:
-    typedef std::complex<float>* floatBuffPtr;
-    typedef uint8_t* charBuffPtr; 
-    
-    
     LFM(float sample_rate,int chirp_length,float band_width,float center_frequency);
     ~LFM();
     void genWave();
@@ -20,7 +20,7 @@ public:
     
 private:
     floatBuffPtr waveBuff;
-    charBuffPtr  charBuff;
+    charBuffPtr  charWave;
 
     float d_sampRate;
     float d_numSamps;

@@ -9,9 +9,8 @@
 #include "driver/device_setup.h"
 #include "proc.h"
 #include "../../waveform/LFM.h" //wow that is really annoying
+#include "../../util/radarDataTypes.h"
 
-
-//could just make this a base class and change the init stuff for different hardware...
 //TODO: implement some kind of common time base, could use the system time but it seems bad...
 //could be worth it to write a wrapper that waits until its time to transmit/record simular to uhd::transmit/recv processes
 namespace hackrf{
@@ -37,9 +36,11 @@ namespace hackrf{
       //buffers and things...
       static proc* pro;
       LFM* waveGen;
-      static LFM::charBuffPtr tx_wave;
+      static std::vector<radar::charBuffPtr> tx_wave;
+      std::vector<radar::charBuffPtr> rx_buffs;
       boost::atomic<bool> enabled,transmitting; //thread controls
-      boost::thread rx_thread,tx_thread;
+      boost::atomic<int> numRxBuffsReady;
+      boost::thread rx_thread,tx_thread,proc_thread;
   };
 }
 

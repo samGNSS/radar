@@ -6,8 +6,10 @@
 #include "src/waveform/LFM.h"
 #include "src/hardware/hackrf/scheduler.h"
 #include "src/hardware/hackrf/driver/device_setup.h"
+#include "src/util/radarDataTypes.h"
 
 namespace po = boost::program_options;
+using namespace radar;
 int main(int argc, char **argv) {
     //variables to be set by po
     std::string args;
@@ -61,16 +63,8 @@ int main(int argc, char **argv) {
     chirpGen->genWave();
     
     std::cout << "getting buffer" << std::endl;
-    std::complex<float>* wave = chirpGen->getFloatBuff();
-    uint8_t* wave2 = chirpGen->getCharBuff();	
+    floatBuffPtr wave = chirpGen->getFloatBuff();
+    charBuffPtr wave2 = chirpGen->getCharBuff();	
 
-    
-    std::cout << "writing binary file" << std::endl;
-    std::ofstream outFid;
-    outFid.open("chirp.bin",std::ios::binary);
-    outFid.write((const char*)&wave2[0],10000);
-    outFid.close();
-//     uint8_t* wave2 = chirpGen->getCharBuff();	
-    chirpGen->~LFM();
     return 0;
 }

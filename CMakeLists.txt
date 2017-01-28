@@ -44,3 +44,5 @@ target_link_libraries(radar PUBLIC
   ${LIBUSB_LIBRARIES}
  )
 
+
+add_subdirectory(src/util)
