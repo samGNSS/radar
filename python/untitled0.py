@@ -17,26 +17,7 @@ def chirp(numSamps,fs,bw,cf):
     return sig
 
 def main(test):    
-    num = 0
-    count = 0
-    for i in test:
-        if i == 1:
-            num += 1
-        else:
-            if num > count:
-                count = num
-            num = 0
-    if num > count:
-        count = num
-    print count
+    pass
 
 if __name__=="__main__":
-    test = [1,0,1,0,1,0,1,1,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,0]
-    aveTime = 0
-    numIter = 100
-    for x in xrange(numIter):
-        start = time.time()
-        main(test)
-        aveTime += time.time() - start
-        
-    print aveTime/numIter
+    main()
