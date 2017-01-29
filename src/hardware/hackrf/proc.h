@@ -2,9 +2,10 @@
 #define __HACKRF_PROC_H__
 
 #include "driver/hackrf.h"
+#include "../../util/radarDataTypes.h"
 
-// #include <boost/atomic.hpp>
-// #include <boost/thread.hpp>
+#include <boost/atomic.hpp>
+#include <boost/thread.hpp>
 
 //this one will be more complicated. Basic execution flow
 /*
@@ -22,7 +23,7 @@ namespace hackrf{
 class proc{
   public:
     void init(); //init processors...filters and the like
-    void rx_monitor(); //wait for samples to come from the hardware
+    void rx_monitor(const std::vector<radar::charBuffPtr> rx_buffs,int numRxBuffNum); //wait for samples to come from the hardware
     void signal_int(); //handle possible iq imbalance, frequency tuning, image rejection, and signal detection
     void corr_proc(); //correlate the samples against a matched filter and look for peaks
     void time_freq_map(); //spectrogram

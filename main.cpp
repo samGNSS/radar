@@ -2,7 +2,6 @@
 #include <fstream>
 #include <boost/program_options.hpp>
 // #include <boost/thread.hpp>
-#include "fftw3.h"
 #include "src/waveform/LFM.h"
 #include "src/hardware/hackrf/scheduler.h"
 #include "src/hardware/hackrf/driver/device_setup.h"
@@ -63,7 +62,7 @@ int main(int argc, char **argv) {
     chirpGen->genWave();
     
     std::cout << "getting buffer" << std::endl;
-    floatBuffPtr wave = chirpGen->getFloatBuff();
+    complexFloatBuffPtr wave = chirpGen->getFloatBuff();
     charBuffPtr wave2 = chirpGen->getCharBuff();	
 
     return 0;

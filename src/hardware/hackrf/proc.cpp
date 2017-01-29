@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include "../../waveform/LFM.h" //wow that is really annoying
+#include "../../signal_processing/fft.h"
 // 
 
 using namespace hackrf;
@@ -11,7 +12,7 @@ void proc::init()
   //things
 }
 
-void proc::rx_monitor()
+void proc::rx_monitor(const std::vector<radar::charBuffPtr> rx_buffs,int numRxBuffNum)
 {
   //things
 }

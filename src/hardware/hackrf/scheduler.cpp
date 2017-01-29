@@ -11,13 +11,19 @@
 
 
 using namespace hackrf;
+
+//forward declaration of static members
 std::vector<radar::charBuffPtr> sched::tx_wave;
+std::vector<radar::charBuffPtr> sched::rx_buffs;
+int sched::rxBuffNum;
 proc* sched::pro;
 
 sched::sched(const device_params* device_options)
 {
   //TODO: add ability to specify number of IQ buffers
   tx_wave.resize(1);
+  rx_buffs.resize(10); //TODO: make this programmable, for now only store 10 buffers 
+  rxBuffNum = 10;
   
   frontEnd = device_options;
   
@@ -34,11 +40,17 @@ sched::sched(const device_params* device_options)
 
 sched::~sched()
 {
-  //nothing to do for now...might call stop from here...
+  //check threads have joined 
   if (enabled)
-    this->stop();
+    this->stop(); //join threads
+    
+  //stop hackrf device
   hackrf_close(hackrf);
   hackrf_exit();
+  
+  //call delete
+  delete pro;
+  delete waveGen;
 }
 
 
@@ -75,12 +87,14 @@ void sched::start()
     std::exit(-1);
   };
   
-  
-  enabled = true;
-  transmitting = true; //always begin by transmitting
-  this->rx_thread = boost::thread(boost::bind(&sched::rx_callback_control, this));
-  this->tx_thread = boost::thread(boost::bind(&sched::tx_callback_control, this));
 
+  //init thread controls
+  enabled      = true;
+  transmitting = true; //always begin by transmitting
+  
+  //init threads
+  this->rx_thread   = boost::thread(boost::bind(&sched::rx_callback_control, this));
+  this->tx_thread   = boost::thread(boost::bind(&sched::tx_callback_control, this));
 }
 
 void sched::stop()
@@ -111,6 +125,7 @@ void sched::rx_callback_control()
 {
   while(enabled){
     while(transmitting){usleep(1);}; //spin lock
+    rxBuffNum > 9 ? 0 : rxBuffNum++;
     switch_rx_tx(); //start transmitting agin
   }
 }
@@ -119,8 +134,10 @@ int sched::rx_callback(hackrf_transfer* transfer)
 {
   //do stuff
   std::cout << "In rx_callback" << std::endl;
-  pro->write_bin(transfer);
-  return -1;
+  //copy transfer buffer into local storage
+  rx_buffs[rxBuffNum]  = std::make_shared<radar::charBuff>(*transfer->buffer);
+  pro->rx_monitor(rx_buffs,rxBuffNum);
+  return 1;
 }
 
 void sched::reopen_device(){

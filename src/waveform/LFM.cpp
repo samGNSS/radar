@@ -17,7 +17,7 @@ LFM::LFM(float sample_rate,int chirp_length,float band_width,float center_freque
     startFreq = d_centerFreq - d_bandWidth/2;
     rate = 10*d_time;
     
-    waveBuff = std::shared_ptr<floatBuff>(new floatBuff[(int)d_numSamps],std::default_delete<floatBuff[]>());
+    waveBuff = std::shared_ptr<complexFloat>(new complexFloat[(int)d_numSamps],std::default_delete<complexFloat[]>());
     charWave = std::shared_ptr<charBuff>(new charBuff[2*(int)d_numSamps],std::default_delete<charBuff[]>());
 }
 
@@ -26,14 +26,14 @@ LFM::~LFM(){}
 void LFM::genWave(){
     for (int i = 0;i<d_numSamps;i++){
         float instFreq = ((startFreq+(rate/2)*i)*i)/d_sampRate;
-        waveBuff.get()[i] = std::complex<float>(cos(PI_PI*instFreq),sin(PI_PI*instFreq));
-	charWave.get()[i] = (uint8_t)cos(PI_PI*instFreq);
+        waveBuff.get()[i]   = complexFloat(cos(PI_PI*instFreq),sin(PI_PI*instFreq));
+	charWave.get()[i]   = (uint8_t)cos(PI_PI*instFreq);
 	charWave.get()[i+1] = (uint8_t)sin(PI_PI*instFreq);
     }    
 }
 
-floatBuffPtr LFM::getFloatBuff(){
-     return std::make_shared<floatBuff>(*waveBuff);
+complexFloatBuffPtr LFM::getFloatBuff(){
+     return std::make_shared<complexFloat>(*waveBuff);
 }
 
 charBuffPtr LFM::getCharBuff(){

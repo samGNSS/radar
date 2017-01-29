@@ -15,11 +15,11 @@ public:
     LFM(float sample_rate,int chirp_length,float band_width,float center_frequency);
     ~LFM();
     void genWave();
-    floatBuffPtr getFloatBuff();
+    complexFloatBuffPtr getFloatBuff();
     charBuffPtr getCharBuff();
     
 private:
-    floatBuffPtr waveBuff;
+    complexFloatBuffPtr waveBuff;
     charBuffPtr  charWave;
 
     float d_sampRate;
