@@ -1,7 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <complex>
 #include <boost/program_options.hpp>
-// #include <boost/thread.hpp>
+#include <boost/thread.hpp>
+#include <fftw3.h>
+
 #include "src/waveform/LFM.h"
 #include "src/hardware/hackrf/scheduler.h"
 #include "src/hardware/hackrf/driver/device_setup.h"

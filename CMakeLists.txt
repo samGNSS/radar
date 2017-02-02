@@ -1,18 +1,56 @@
 cmake_minimum_required(VERSION 2.6)
 project(radar)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O4 -Wall -lusb -lfftw3f")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O4 -Wall -lfftw3f -lusb")
 file(GLOB_RECURSE sources ./src/*.cpp ./src/*.c ./src/*.h)
  
 add_executable(radar main.cpp ${sources})
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
+
 ###############################################################################
 ## dependencies ###############################################################
 ###############################################################################
 
 # this defines the variables Boost_LIBRARIES that contain all library names
 # that we need to link to
+
+
 find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread atomic REQUIRED)
 find_package(Volk REQUIRED)
 
+
+FIND_PATH(
+    FFTW3F_INCLUDE_DIRS
+    NAMES fftw3.h
+    HINTS $ENV{FFTW3_DIR}/include
+        ${PC_FFTW3F_INCLUDE_DIR}
+    PATHS /usr/local/include
+          /usr/include
+)
+
+FIND_LIBRARY(
+    FFTW3F_LIBRARIES
+    NAMES fftw3f libfftw3f
+    HINTS $ENV{FFTW3_DIR}/lib
+        ${PC_FFTW3F_LIBDIR}
+    PATHS /usr/local/lib
+          /usr/lib
+          /usr/lib64
+)
+
+FIND_LIBRARY(
+    FFTW3F_THREADS_LIBRARIES
+    NAMES fftw3f_threads libfftw3f_threads
+    HINTS $ENV{FFTW3_DIR}/lib
+        ${PC_FFTW3F_LIBDIR}
+    PATHS /usr/local/lib
+          /usr/lib
+          /usr/lib64
+)
+
+
+# FIND_LIBRARY(FFTW3_LIBRARIES NAMES fftw3f libfftw3f.so PATHS /usr/lib/x86_64-linux-gnu /usr/include)
 
 #libusb bullshit    
 IF (NOT WIN32)
@@ -42,7 +80,5 @@ target_link_libraries(radar PUBLIC
   ${Boost_LIBRARIES}
   ${Volk_LIBRARIES}
   ${LIBUSB_LIBRARIES}
+  ${FFTW3F_LIBRARIES}
  )
-
-
-add_subdirectory(src/util)

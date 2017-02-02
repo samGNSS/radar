@@ -1,8 +1,13 @@
 #ifndef __HACKRF_PROC_H__
 #define __HACKRF_PROC_H__
 
+#include <fstream>
+
 #include "driver/hackrf.h"
 #include "../../util/radarDataTypes.h"
+#include "../../signal_processing/fft.h"
+#include "../../signal_processing/correlator.h"
+#include "../../signal_processing/cfar.h"
 
 #include <boost/atomic.hpp>
 #include <boost/thread.hpp>
@@ -22,7 +27,9 @@
 namespace hackrf{
 class proc{
   public:
-    void init(); //init processors...filters and the like
+    proc(std::string debugFile, std::string spectrogramBinFile, std::string timeDisMapBinFile);
+    ~proc();
+    void init(int fftSize,int inputSize); //init processors...filters and the like
     void rx_monitor(const std::vector<radar::charBuffPtr> rx_buffs,int numRxBuffNum); //wait for samples to come from the hardware
     void signal_int(); //handle possible iq imbalance, frequency tuning, image rejection, and signal detection
     void corr_proc(); //correlate the samples against a matched filter and look for peaks
@@ -31,7 +38,19 @@ class proc{
     void write_bin(hackrf_transfer* transfer);
     
   private:
-    //things
+    //file stuff
+    std::ofstream binDump; //file stream for debugging
+    std::string debugFile;
+    std::string spectrogramBinFile;
+    std::string timeDisMapBinFile;
+    
+    //signal processing classes
+    FFT* fftProc; 
+    
+    //threads
+    boost::thread corrThread; //runs the correlator
+    boost::thread spectrogram; //creates the spectrogram
+    
   };
 }
 #endif

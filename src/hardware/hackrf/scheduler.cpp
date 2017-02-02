@@ -35,7 +35,7 @@ sched::sched(const device_params* device_options)
   waveGen->genWave();
   tx_wave[0] = waveGen->getCharBuff();
   
-  pro = new proc();
+  pro = new proc("proc.bin","proc.bin","proc.bin");
 }
 
 sched::~sched()

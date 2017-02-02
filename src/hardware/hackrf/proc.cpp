@@ -1,5 +1,4 @@
 #include "proc.h"
-#include <fstream>
 #include <iostream>
 #include "../../waveform/LFM.h" //wow that is really annoying
 #include "../../signal_processing/fft.h"
@@ -7,9 +6,14 @@
 
 using namespace hackrf;
 
-void proc::init()
+proc::proc(std::string debugFile, std::string spectrogramBinFile, std::string timeDisMapBinFile):debugFile(debugFile),spectrogramBinFile(spectrogramBinFile),timeDisMapBinFile(timeDisMapBinFile){}
+proc::~proc(){
+  delete fftProc;
+}
+
+void proc::init(int fftSize,int inputSize)
 {
-  //things
+  fftProc = new FFT(fftSize,inputSize);
 }
 
 void proc::rx_monitor(const std::vector<radar::charBuffPtr> rx_buffs,int numRxBuffNum)
@@ -41,8 +45,7 @@ void proc::time_dis_map()
 void proc::write_bin(hackrf_transfer* transfer)
 {
   std::cout << "Writing file" << std::endl;
-  std::ofstream binDump;
-  binDump.open("proc.bin",std::ios::binary | std::ios::app);
+  binDump.open(debugFile,std::ios::binary | std::ios::app);
   binDump.write((const char*)&transfer->buffer[0],transfer->valid_length);
   binDump.close();
 }
