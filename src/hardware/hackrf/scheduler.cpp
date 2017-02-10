@@ -14,7 +14,7 @@ using namespace hackrf;
 
 //forward declaration of static members
 std::vector<radar::charBuffPtr> sched::tx_wave;
-std::vector<radar::charBuffPtr> sched::rx_buffs;
+radar::charBuffPtr sched::rx_buff;
 int sched::rxBuffNum;
 proc* sched::pro;
 
@@ -22,7 +22,6 @@ sched::sched(const device_params* device_options)
 {
   //TODO: add ability to specify number of IQ buffers
   tx_wave.resize(1);
-  rx_buffs.resize(10); //TODO: make this programmable, for now only store 10 buffers 
   rxBuffNum = 10;
   
   frontEnd = device_options;
@@ -135,8 +134,8 @@ int sched::rx_callback(hackrf_transfer* transfer)
   //do stuff
   std::cout << "In rx_callback" << std::endl;
   //copy transfer buffer into local storage
-  rx_buffs[rxBuffNum]  = std::make_shared<radar::charBuff>(*transfer->buffer);
-  pro->rx_monitor(rx_buffs,rxBuffNum);
+  rx_buff = std::make_shared<radar::charBuff>(*transfer->buffer);
+  pro->rx_monitor(rx_buff,rxBuffNum);
   return 1;
 }
 

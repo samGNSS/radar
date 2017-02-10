@@ -26,6 +26,7 @@ void FFT::getFFT(radar::complexFloatBuffPtr input, radar::complexFloatBuffPtr ou
   fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input.get());
   fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output.get());
   fftwf_execute_dft(forwardDFT,inputTMP,outputTMP);
+  output.reset(reinterpret_cast<radar::complexFloat*>(outputTMP));
   return;
 };
 
@@ -33,6 +34,7 @@ void FFT::getIFFT(radar::complexFloatBuffPtr input, radar::complexFloatBuffPtr o
   fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input.get());
   fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output.get());
   fftwf_execute_dft(forwardDFT,inputTMP,outputTMP);
+  output.reset(reinterpret_cast<radar::complexFloat*>(outputTMP));
   return;
 };
 

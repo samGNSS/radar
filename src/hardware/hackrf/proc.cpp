@@ -6,7 +6,11 @@
 
 using namespace hackrf;
 
-proc::proc(std::string debugFile, std::string spectrogramBinFile, std::string timeDisMapBinFile):debugFile(debugFile),spectrogramBinFile(spectrogramBinFile),timeDisMapBinFile(timeDisMapBinFile){}
+proc::proc(std::string debugFile, std::string spectrogramBinFile, std::string timeDisMapBinFile):debugFile(debugFile),spectrogramBinFile(spectrogramBinFile),timeDisMapBinFile(timeDisMapBinFile){
+  charBuffs.resize(10);
+  floatBuffs.resize(10);  
+}
+
 proc::~proc(){
   delete fftProc;
 }
@@ -14,16 +18,34 @@ proc::~proc(){
 void proc::init(int fftSize,int inputSize)
 {
   fftProc = new FFT(fftSize,inputSize);
+  
+  buffRdy = false;
+  corrRdy = false;
+  specRdy = false;
+  buffNum = 0;
+  
+  //bind threads
+  this->corrThread   = boost::thread(boost::bind(&proc::corr_proc, this));
+  this->specThread   = boost::thread(boost::bind(&proc::time_freq_map, this));
+  this->detThread    = boost::thread(boost::bind(&proc::signal_int, this));
+  
 }
 
-void proc::rx_monitor(const std::vector<radar::charBuffPtr> rx_buffs,int numRxBuffNum)
+void proc::rx_monitor(const radar::charBuffPtr rx_buff,int rxBuffNum)
 {
   //things
+  charBuffs[rxBuffNum] = rx_buff;
+  buffNum = (buffNum + 1)%10;
+  buffRdy = true;
 }
 
 void proc::signal_int()
 {
-  //things
+  //convert buffer to floating point
+  while(!buffRdy){usleep(1);};
+  floatBuffs[buffNum].reset(reinterpret_cast<radar::complexFloat*>(charBuffs[buffNum].get()));
+  fftProc(floatBuffs[buffNum],floatBuffs[buffNum]);
+  buffRdy = true;
 }
 
 void proc::corr_proc()
@@ -42,10 +64,10 @@ void proc::time_dis_map()
   //things
 }
 
-void proc::write_bin(hackrf_transfer* transfer)
+void proc::write_bin()
 {
   std::cout << "Writing file" << std::endl;
   binDump.open(debugFile,std::ios::binary | std::ios::app);
-  binDump.write((const char*)&transfer->buffer[0],transfer->valid_length);
+  binDump.write(reinterpret_cast<char*>(floatBuffs[buffNum]),);
   binDump.close();
 }

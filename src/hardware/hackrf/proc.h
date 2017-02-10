@@ -30,12 +30,12 @@ class proc{
     proc(std::string debugFile, std::string spectrogramBinFile, std::string timeDisMapBinFile);
     ~proc();
     void init(int fftSize,int inputSize); //init processors...filters and the like
-    void rx_monitor(const std::vector<radar::charBuffPtr> rx_buffs,int numRxBuffNum); //wait for samples to come from the hardware
+    void rx_monitor(const radar::charBuffPtr rx_buff,int rxBuffNum); //wait for samples to come from the hardware
     void signal_int(); //handle possible iq imbalance, frequency tuning, image rejection, and signal detection
     void corr_proc(); //correlate the samples against a matched filter and look for peaks
     void time_freq_map(); //spectrogram
     void time_dis_map();  //when and where are the detections
-    void write_bin(hackrf_transfer* transfer);
+    void write_bin();
     
   private:
     //file stuff
@@ -49,8 +49,16 @@ class proc{
     
     //threads
     boost::thread corrThread; //runs the correlator
-    boost::thread spectrogram; //creates the spectrogram
+    boost::thread specThread; //creates the spectrogram
+    boost::thread detThread;
     
+    //variables
+    std::vector<radar::charBuffPtr> charBuffs;
+    std::vector<radar::complexFloatBuffPtr> floatBuffs;
+    
+    boost::atomic<bool> buffRdy,corrRdy,specRdy;
+    
+    int buffNum;
   };
 }
 #endif
