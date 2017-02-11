@@ -1,5 +1,7 @@
 #include "proc.h"
 #include <iostream>
+#include <fstream>
+
 #include "../../waveform/LFM.h" //wow that is really annoying
 #include "../../signal_processing/fft.h"
 // 
@@ -17,6 +19,7 @@ proc::~proc(){
 
 void proc::init(int fftSize,int inputSize)
 {
+  this->buffLen = inputSize;
   fftProc = new FFT(fftSize,inputSize);
   
   buffRdy = false;
@@ -44,7 +47,7 @@ void proc::signal_int()
   //convert buffer to floating point
   while(!buffRdy){usleep(1);};
   floatBuffs[buffNum].reset(reinterpret_cast<radar::complexFloat*>(charBuffs[buffNum].get()));
-  fftProc(floatBuffs[buffNum],floatBuffs[buffNum]);
+  fftProc->getFFT(floatBuffs[buffNum],floatBuffs[buffNum]);
   buffRdy = true;
 }
 
@@ -68,6 +71,6 @@ void proc::write_bin()
 {
   std::cout << "Writing file" << std::endl;
   binDump.open(debugFile,std::ios::binary | std::ios::app);
-  binDump.write(reinterpret_cast<char*>(floatBuffs[buffNum]),);
+  binDump.write(reinterpret_cast<char*>(floatBuffs[buffNum].get()),buffLen);
   binDump.close();
 }

@@ -59,6 +59,7 @@ class proc{
     boost::atomic<bool> buffRdy,corrRdy,specRdy;
     
     int buffNum;
+    int buffLen;
   };
 }
 #endif
