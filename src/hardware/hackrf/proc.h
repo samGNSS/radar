@@ -38,6 +38,9 @@ class proc{
     void write_bin();
     
   private:
+    void stop();
+    
+    
     //file stuff
     std::ofstream binDump; //file stream for debugging
     std::string debugFile;
@@ -56,7 +59,9 @@ class proc{
     std::vector<radar::charBuffPtr> charBuffs;
     std::vector<radar::complexFloatBuffPtr> floatBuffs;
     
-    boost::atomic<bool> buffRdy,corrRdy,specRdy;
+    boost::atomic<bool> buffRdy,corrRdy,specRdy,enabled;
+    
+    
     
     int buffNum;
     int buffLen;

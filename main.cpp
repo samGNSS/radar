@@ -41,8 +41,6 @@ int main(int argc, char **argv) {
 								 rxVgaGain,
 								 rxLnaGain,
 								 txVgaGain};
-
-    std::cout << frontEnd.centerFreq << std::endl;
 			      
     //start radar class
     hackrf::sched* radarSched = new hackrf::sched(&frontEnd);

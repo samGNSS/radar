@@ -38,7 +38,7 @@ namespace hackrf{
       LFM* waveGen;
       static std::vector<radar::charBuffPtr> tx_wave;
       static radar::charBuffPtr rx_buff;
-      boost::atomic<bool> enabled,transmitting; //thread controls
+      boost::atomic<bool> enabled,transmitting,receiving; //thread controls
       boost::thread rx_thread,tx_thread,proc_thread;
       
       static int rxBuffNum;

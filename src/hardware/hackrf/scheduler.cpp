@@ -8,6 +8,8 @@
 
 #include "scheduler.h"
 #include <iostream>
+#include <stdio.h>
+
 
 
 using namespace hackrf;
@@ -48,13 +50,15 @@ sched::~sched()
   hackrf_exit();
   
   //call delete
-  delete pro;
+  pro->~proc();
   delete waveGen;
 }
 
 
 void sched::init()
 { 
+  std::cout << "In init" << std::endl;
+
   //enable and check the hardware
   int result = hackrf_init();
   if (result != HACKRF_SUCCESS){
@@ -70,7 +74,7 @@ void sched::init()
   
   //set up device front end
   result = set_up_device(this->frontEnd,hackrf);
-  if (result == -1){std::exit(-1);}
+  if (result == -1){std::cout << "Device set up failed" << std::endl;std::exit(-1);}
   std::cout << "Return from device setup: " << result << std::endl;
 }
 
@@ -94,6 +98,8 @@ void sched::start()
   //init threads
   this->rx_thread   = boost::thread(boost::bind(&sched::rx_callback_control, this));
   this->tx_thread   = boost::thread(boost::bind(&sched::tx_callback_control, this));
+  
+  std::cout << "::STARTED RADAR::" << std::endl;
 }
 
 void sched::stop()
@@ -108,6 +114,7 @@ void sched::tx_callback_control()
 {
   while(enabled){
     while(!transmitting){usleep(1);}; //spin lock 
+    boost::this_thread::sleep(boost::posix_time::seconds(0.1));
     switch_rx_tx(); //start receiving
   }
 }
@@ -116,7 +123,7 @@ int sched::tx_callback(hackrf_transfer* transfer)
 {
   std::cout << "In tx_callback" << std::endl;
   int numSamps = transfer->valid_length < 10000 ? transfer->valid_length : 10000;
-  std::memcpy(tx_wave[0].get(),&transfer->buffer[0],numSamps);
+  std::memcpy(&transfer->buffer[0],tx_wave[0].get(),numSamps);
   return 0;
 }
 
@@ -124,7 +131,12 @@ void sched::rx_callback_control()
 {
   while(enabled){
     while(transmitting){usleep(1);}; //spin lock
-    rxBuffNum > 9 ? 0 : rxBuffNum++;
+    int tmp = rxBuffNum;
+    std::cout << "tmp: " << rxBuffNum << std::endl;
+
+    while(rxBuffNum -tmp ==0){usleep(1);}; //wait for new buffer 
+    pro->rx_monitor(rx_buff,rxBuffNum);
+//     boost::this_thread::sleep(boost::posix_time::seconds(1));
     switch_rx_tx(); //start transmitting agin
   }
 }
@@ -133,9 +145,12 @@ int sched::rx_callback(hackrf_transfer* transfer)
 {
   //do stuff
   std::cout << "In rx_callback" << std::endl;
+  rxBuffNum =0;
   //copy transfer buffer into local storage
   rx_buff = std::make_shared<radar::charBuff>(*transfer->buffer);
-  pro->rx_monitor(rx_buff,rxBuffNum);
+  rxBuffNum > 9 ? 0 : ++rxBuffNum;
+  std::cout << rxBuffNum << std::endl;
+
   return 1;
 }
 
@@ -150,8 +165,10 @@ void sched::reopen_device(){
 
 void sched::switch_rx_tx()
 {
+  //switch 
+  transmitting = !transmitting;
   //need to make calls to the hackrf driver to stop rx/tx and start the other one
-  if (transmitting){
+  if (!transmitting){
     //might drop samples...
     hackrf_stop_tx(hackrf);
     std::cout << "Stopped tx" << std::endl;
@@ -181,7 +198,6 @@ void sched::switch_rx_tx()
 
   }
   std::cout << "Switched" << std::endl;
-  //switch 
-  transmitting = !transmitting;
+
 }
 

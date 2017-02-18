@@ -14,11 +14,30 @@ proc::proc(std::string debugFile, std::string spectrogramBinFile, std::string ti
 }
 
 proc::~proc(){
+  if(enabled)
+    stop();
+  
+  
+  //join threads
+  this->corrThread.join();
+  this->specThread.join();
+  this->detThread.join();
+  
   delete fftProc;
 }
 
+void proc::stop(){
+  this->enabled = false;
+  //join threads
+  this->corrThread.join();
+  this->specThread.join();
+  this->detThread.join();
+}
+
+
 void proc::init(int fftSize,int inputSize)
 {
+  this->enabled = true;
   this->buffLen = inputSize;
   fftProc = new FFT(fftSize,inputSize);
   
@@ -44,11 +63,13 @@ void proc::rx_monitor(const radar::charBuffPtr rx_buff,int rxBuffNum)
 
 void proc::signal_int()
 {
-  //convert buffer to floating point
-  while(!buffRdy){usleep(1);};
-  floatBuffs[buffNum].reset(reinterpret_cast<radar::complexFloat*>(charBuffs[buffNum].get()));
-  fftProc->getFFT(floatBuffs[buffNum],floatBuffs[buffNum]);
-  buffRdy = true;
+  while(enabled){
+    //convert buffer to floating point
+    while(!buffRdy){usleep(1);};
+    floatBuffs[buffNum].reset(reinterpret_cast<radar::complexFloat*>(charBuffs[buffNum].get()));
+  //   fftProc->getFFT(floatBuffs[buffNum],floatBuffs[buffNum]);
+    buffRdy = false;
+  }
 }
 
 void proc::corr_proc()
