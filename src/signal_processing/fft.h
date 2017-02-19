@@ -16,8 +16,8 @@ public:
   ~FFT();
   
   void resetFFTSize(int newSize,int inputSize);
-  void getFFT(radar::complexFloatBuffPtr input, radar::complexFloatBuffPtr output);
-  void getIFFT(radar::complexFloatBuffPtr input, radar::complexFloatBuffPtr output);
+  void getFFT(radar::complexFloat* input, radar::complexFloat* output);
+  void getIFFT(radar::complexFloat* input, radar::complexFloat* output);
   
 private:
   fftwf_complex* outputMem;

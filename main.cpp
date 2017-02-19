@@ -49,22 +49,5 @@ int main(int argc, char **argv) {
 
     usleep(3000000);
     radarSched->~sched();
-			      
-			      
-    std::cout << "Testing LFM generation" << std::endl;
-    
-    std::cout << "getting class" << std::endl;
-    LFM* chirpGen = new LFM((float) rate,
-			    (int) 10000,
-			    (float) 50000,
-			    (float) 100000);
-    
-    std::cout << "generating chirp" << std::endl;
-    chirpGen->genWave();
-    
-    std::cout << "getting buffer" << std::endl;
-    complexFloatBuffPtr wave = chirpGen->getFloatBuff();
-    charBuffPtr wave2 = chirpGen->getCharBuff();	
-
     return 0;
 }

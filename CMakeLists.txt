@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(radar)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O4 -Wall -lfftw3f -lusb")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -lfftw3f -lvolk -lusb")
 file(GLOB_RECURSE sources ./src/*.cpp ./src/*.c ./src/*.h)
  
 add_executable(radar main.cpp ${sources})
@@ -16,7 +16,7 @@ MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
 # that we need to link to
 
 
-find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread atomic REQUIRED)
+find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread atomic python REQUIRED)
 find_package(Volk REQUIRED)
 
 

@@ -22,19 +22,17 @@ void FFT::resetFFTSize(int fftSize,int inputSize){
   fftwf_free(tmp);
 };
 
-void FFT::getFFT(radar::complexFloatBuffPtr input, radar::complexFloatBuffPtr output){
-  fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input.get());
-  fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output.get());
+void FFT::getFFT(radar::complexFloat* input, radar::complexFloat* output){
+  fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input);
+  fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output);
   fftwf_execute_dft(forwardDFT,inputTMP,outputTMP);
-  output.reset(reinterpret_cast<radar::complexFloat*>(outputTMP));
   return;
 };
 
-void FFT::getIFFT(radar::complexFloatBuffPtr input, radar::complexFloatBuffPtr output){
-  fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input.get());
-  fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output.get());
+void FFT::getIFFT(radar::complexFloat* input, radar::complexFloat* output){
+  fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input);
+  fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output);
   fftwf_execute_dft(forwardDFT,inputTMP,outputTMP);
-  output.reset(reinterpret_cast<radar::complexFloat*>(outputTMP));
   return;
 };
 

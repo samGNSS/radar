@@ -21,6 +21,9 @@ namespace hackrf{
       void init();          //init hardware
       void start();         //start threads
       void stop();          //stop threads
+      
+    private:
+      //private methods
       void tx_callback_control();   //handle tx
       static int tx_callback(hackrf_transfer* transfer);
       void rx_callback_control();   //handle rx
@@ -28,7 +31,7 @@ namespace hackrf{
       void reopen_device();
       void switch_rx_tx();  //switch the hardware to either transmit or receive
       
-    private:
+      
       //hackrf variables
       const device_params* frontEnd;
       hackrf_device* hackrf; 		//device pointer
@@ -37,12 +40,11 @@ namespace hackrf{
       static proc* pro;
       LFM* waveGen;
       static std::vector<radar::charBuffPtr> tx_wave;
-      static radar::charBuffPtr rx_buff;
-      boost::atomic<bool> enabled,transmitting,receiving; //thread controls
+      static radar::charBuff* rx_buff;
+      boost::atomic<bool> enabled,transmitting; //thread controls
       boost::thread rx_thread,tx_thread,proc_thread;
       
-      static int rxBuffNum;
-      
+      static boost::atomic<bool> newBuff;      
   };
 }
 
