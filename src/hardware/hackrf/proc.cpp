@@ -2,8 +2,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "../../waveform/LFM.h" //wow that is really annoying
 #include "../../signal_processing/fft.h"
+#include "../../waveform/LFM.h" //wow that is really annoying
 // 
 
 using namespace hackrf;
@@ -19,6 +19,7 @@ proc::~proc(){
     stop();
   
   fftProc->~FFT();
+  simdMath->~math();
 }
 
 void proc::stop(){
@@ -36,6 +37,7 @@ void proc::init(int fftSize,int inputSize)
   this->enabled = true;
   this->buffLen = inputSize;
   fftProc = new FFT(fftSize,inputSize);
+  simdMath = new math(inputSize);
   
   buffRdy = false;
   corrRdy = false;
@@ -71,12 +73,15 @@ void proc::signal_int()
     while(!buffRdy){usleep(1);};
     //got a buffer, convert to complex float and get fft
     for(int i=0,j=0;i<buffLen;i+=2,j++){
-      floatBuffs[buffNum].get()[j] = radar::complexFloat(charBuffs[buffNum].get()[i],charBuffs[buffNum].get()[i+1]); 
+      floatBuffs[buffNum].get()[j] = radar::complexFloat(charBuffs[buffNum].get()[i],charBuffs[buffNum].get()[i+1]);
       floatBuffs[buffNum].get()[j] /= 128;
       floatBuffs[buffNum].get()[j] -= radar::complexFloat(1,1);
     }
+    //get fft
     fftProc->getFFT(floatBuffs[buffNum].get(),fftBuffs[buffNum].get());
-    write_bin();
+    //*******************************************
+    write_bin(); //debug
+    //*******************************************
     buffRdy = false;
   }
 }

@@ -19,7 +19,6 @@ MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
 find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread atomic python REQUIRED)
 find_package(Volk REQUIRED)
 
-
 FIND_PATH(
     FFTW3F_INCLUDE_DIRS
     NAMES fftw3.h
@@ -78,7 +77,7 @@ MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
 
 target_link_libraries(radar PUBLIC
   ${Boost_LIBRARIES}
-  ${Volk_LIBRARIES}
+  ${VOLK_LIBRARIES}
   ${LIBUSB_LIBRARIES}
   ${FFTW3F_LIBRARIES}
- )
+ ) 

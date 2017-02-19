@@ -5,6 +5,7 @@
 
 #include "driver/hackrf.h"
 #include "../../util/radarDataTypes.h"
+#include "../../util/math/volk_math.h"
 #include "../../signal_processing/fft.h"
 #include "../../signal_processing/correlator.h"
 #include "../../signal_processing/cfar.h"
@@ -49,6 +50,7 @@ class proc{
     
     //signal processing classes
     FFT* fftProc; 
+    math* simdMath;
     
     //threads
     boost::thread corrThread; //runs the correlator
@@ -60,7 +62,6 @@ class proc{
     std::vector<radar::complexFloatBuffPtr> floatBuffs,fftBuffs;
     
     boost::atomic<bool> buffRdy,corrRdy,specRdy,enabled;
-    
     
     
     int buffNum;

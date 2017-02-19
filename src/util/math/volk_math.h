@@ -10,6 +10,7 @@ public:
   ~math();
   void normalize(radar::complexFloat* input,float normConst);
   void add(radar::complexFloat* input1,radar::complexFloat* input2);
+  void add_const(radar::complexFloat* input,float addConst);
   void multiply(radar::complexFloat* input1,radar::complexFloat* input2);
 private:
   unsigned int alignment;//memory alignment for volk
