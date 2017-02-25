@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(radar)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -lfftw3f -lvolk -lusb")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 file(GLOB_RECURSE sources ./src/*.cpp ./src/*.c ./src/*.h)
  
 add_executable(radar main.cpp ${sources})
@@ -15,8 +15,8 @@ MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
 # this defines the variables Boost_LIBRARIES that contain all library names
 # that we need to link to
 
-
-find_package(Boost 1.5.0 COMPONENTS filesystem system program_options thread atomic python REQUIRED)
+# thread atomic python
+find_package(Boost 1.5.0 COMPONENTS program_options REQUIRED)
 find_package(Volk REQUIRED)
 
 FIND_PATH(
@@ -80,4 +80,5 @@ target_link_libraries(radar PUBLIC
   ${VOLK_LIBRARIES}
   ${LIBUSB_LIBRARIES}
   ${FFTW3F_LIBRARIES}
+  -lpthread
  ) 

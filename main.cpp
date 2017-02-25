@@ -2,7 +2,7 @@
 #include <fstream>
 #include <complex>
 #include <boost/program_options.hpp>
-#include <boost/thread.hpp>
+#include <thread>
 #include <fftw3.h>
 
 #include "src/waveform/LFM.h"

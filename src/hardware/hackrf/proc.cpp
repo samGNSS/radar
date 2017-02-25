@@ -1,6 +1,11 @@
 #include "proc.h"
 #include <iostream>
 #include <fstream>
+#include <functional>
+#include <memory>
+#include <unistd.h>
+
+
 
 #include "../../signal_processing/fft.h"
 #include "../../waveform/LFM.h" //wow that is really annoying
@@ -45,13 +50,13 @@ void proc::init(int fftSize,int inputSize)
   buffNum = 0;
   
   //bind threads
-  this->corrThread   = boost::thread(boost::bind(&proc::corr_proc, this));
-  this->specThread   = boost::thread(boost::bind(&proc::time_freq_map, this));
-  this->detThread    = boost::thread(boost::bind(&proc::signal_int, this));
+  this->corrThread   = std::thread(std::bind(&proc::corr_proc, this));
+  this->specThread   = std::thread(std::bind(&proc::time_freq_map, this));
+  this->detThread    = std::thread(std::bind(&proc::signal_int, this));
   
   
   //preallocate and initialize the buffers
-  for(int allocLoop = 0;allocLoop<charBuffs.size();allocLoop++){
+  for(int allocLoop = 0;allocLoop<(int)charBuffs.size();allocLoop++){
     floatBuffs[allocLoop] = std::shared_ptr<radar::complexFloat>((radar::complexFloat*)std::malloc(inputSize*sizeof(radar::complexFloat)),std::default_delete<radar::complexFloat>());    
     fftBuffs[allocLoop] = std::shared_ptr<radar::complexFloat>((radar::complexFloat*)std::malloc(fftSize*sizeof(radar::complexFloat)),std::default_delete<radar::complexFloat>());
   }

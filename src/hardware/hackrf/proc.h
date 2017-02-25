@@ -10,8 +10,9 @@
 #include "../../signal_processing/correlator.h"
 #include "../../signal_processing/cfar.h"
 
-#include <boost/atomic.hpp>
-#include <boost/thread.hpp>
+#include <atomic>
+#include <thread>
+#include <vector>
 
 //this one will be more complicated. Basic execution flow
 /*
@@ -53,15 +54,15 @@ class proc{
     math* simdMath;
     
     //threads
-    boost::thread corrThread; //runs the correlator
-    boost::thread specThread; //creates the spectrogram
-    boost::thread detThread;
+    std::thread corrThread; //runs the correlator
+    std::thread specThread; //creates the spectrogram
+    std::thread detThread;
     
     //variables
     std::vector<radar::charBuffPtr> charBuffs;
     std::vector<radar::complexFloatBuffPtr> floatBuffs,fftBuffs;
     
-    boost::atomic<bool> buffRdy,corrRdy,specRdy,enabled;
+    std::atomic<bool> buffRdy,corrRdy,specRdy,enabled;
     
     
     int buffNum;

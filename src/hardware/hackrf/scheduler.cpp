@@ -7,17 +7,18 @@
  */
 
 #include "scheduler.h"
+#include <chrono>
+#include <cstring>
 #include <iostream>
 #include <stdio.h>
-
-
+#include <unistd.h>
 
 using namespace hackrf;
 
 //forward declaration of static members
 std::vector<radar::charBuffPtr> sched::tx_wave;
 radar::charBuff* sched::rx_buff;
-boost::atomic<bool> sched::newBuff;
+std::atomic<bool> sched::newBuff;
 proc* sched::pro;
 
 sched::sched(const device_params* device_options)
@@ -103,8 +104,8 @@ void sched::start()
   newBuff = false;
   
   //init threads
-  this->rx_thread   = boost::thread(boost::bind(&sched::rx_callback_control, this));
-  this->tx_thread   = boost::thread(boost::bind(&sched::tx_callback_control, this));
+  this->rx_thread = std::thread(std::bind(&sched::rx_callback_control, this));
+  this->tx_thread = std::thread(std::bind(&sched::tx_callback_control, this));
   
   std::cout << "::STARTED RADAR::" << std::endl;
 }
@@ -125,7 +126,7 @@ void sched::tx_callback_control()
 {
   while(enabled){
     while(!transmitting){usleep(1);}; //spin lock, wait transmit signal 
-    boost::this_thread::sleep(boost::posix_time::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     switch_rx_tx(); //start receiving
   }
 }
@@ -144,7 +145,7 @@ void sched::rx_callback_control()
 {
   while(enabled){
     while(transmitting){usleep(1);}; //spin lock
-    boost::this_thread::sleep(boost::posix_time::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     
     //check for new buffer
     if(newBuff){

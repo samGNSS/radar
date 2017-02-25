@@ -1,8 +1,8 @@
 #ifndef __HACKRF_SCHED_H__
 #define __HACKRF_SCHED_H__
 
-#include <boost/atomic.hpp>
-#include <boost/thread.hpp>
+#include <atomic>
+#include <thread>
 
 
 #include "driver/hackrf.h"
@@ -41,10 +41,10 @@ namespace hackrf{
       LFM* waveGen;
       static std::vector<radar::charBuffPtr> tx_wave;
       static radar::charBuff* rx_buff;
-      boost::atomic<bool> enabled,transmitting; //thread controls
-      boost::thread rx_thread,tx_thread,proc_thread;
+      std::atomic<bool> enabled,transmitting; //thread controls
+      std::thread rx_thread,tx_thread,proc_thread;
       
-      static boost::atomic<bool> newBuff;      
+      static std::atomic<bool> newBuff;      
   };
 }
 
