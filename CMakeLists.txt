@@ -3,7 +3,7 @@ project(radar)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 file(GLOB_RECURSE sources ./src/*.cpp ./src/*.c ./src/*.h)
  
-add_executable(radar main.cpp ${sources})
+add_executable(radar main_radar.cpp ${sources})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
