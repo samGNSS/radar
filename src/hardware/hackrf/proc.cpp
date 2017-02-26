@@ -1,4 +1,5 @@
 #include "proc.h"
+
 #include <iostream>
 #include <fstream>
 #include <functional>
@@ -14,6 +15,7 @@
 using namespace hackrf;
 
 proc::proc(std::string debugFile, std::string spectrogramBinFile, std::string timeDisMapBinFile):debugFile(debugFile),spectrogramBinFile(spectrogramBinFile),timeDisMapBinFile(timeDisMapBinFile){
+  absBuffs.resize(10);  
   charBuffs.resize(10);
   floatBuffs.resize(10);  
   fftBuffs.resize(10);  
@@ -25,6 +27,7 @@ proc::~proc(){
   
   fftProc->~FFT();
   simdMath->~math();
+  plothandler->~plot();
 }
 
 void proc::stop(){
@@ -43,6 +46,7 @@ void proc::init(int fftSize,int inputSize)
   this->buffLen = inputSize;
   fftProc = new FFT(fftSize,inputSize);
   simdMath = new math(inputSize);
+  plothandler = new util::plot(inputSize);
   
   buffRdy = false;
   corrRdy = false;
@@ -57,6 +61,7 @@ void proc::init(int fftSize,int inputSize)
   
   //preallocate and initialize the buffers
   for(int allocLoop = 0;allocLoop<(int)charBuffs.size();allocLoop++){
+    absBuffs[allocLoop] = std::shared_ptr<float>((float*)std::malloc(inputSize*sizeof(float)),std::default_delete<float>());  
     floatBuffs[allocLoop] = std::shared_ptr<radar::complexFloat>((radar::complexFloat*)std::malloc(inputSize*sizeof(radar::complexFloat)),std::default_delete<radar::complexFloat>());    
     fftBuffs[allocLoop] = std::shared_ptr<radar::complexFloat>((radar::complexFloat*)std::malloc(fftSize*sizeof(radar::complexFloat)),std::default_delete<radar::complexFloat>());
   }
@@ -84,8 +89,11 @@ void proc::signal_int()
     }
     //get fft
     fftProc->getFFT(floatBuffs[buffNum].get(),fftBuffs[buffNum].get());
+    simdMath->abs(fftBuffs[buffNum].get(),absBuffs[buffNum].get());
+
     //*******************************************
     write_bin(); //debug
+    plothandler->plot2d(nullptr,absBuffs[buffNum].get());
     //*******************************************
     buffRdy = false;
   }
@@ -111,6 +119,11 @@ void proc::write_bin()
 {
   std::cout << "Writing file" << std::endl;
   binDump.open(debugFile,std::ios::binary);
+  binDump.write(reinterpret_cast<char*>(absBuffs[buffNum].get()),buffLen*sizeof(float));
+  binDump.close();
+  binDump.open("procFFt.bin",std::ios::binary);
   binDump.write(reinterpret_cast<char*>(fftBuffs[buffNum].get()),buffLen*sizeof(radar::complexFloat));
   binDump.close();
+  std::cout << "Wrote file" << std::endl;
+
 }

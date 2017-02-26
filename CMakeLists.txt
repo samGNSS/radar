@@ -12,13 +12,19 @@ MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
 ## dependencies ###############################################################
 ###############################################################################
 
-# this defines the variables Boost_LIBRARIES that contain all library names
-# that we need to link to
-
-# thread atomic python
+#########################################################
+#Boost: program options (still the best)   
+######################################################### 
 find_package(Boost 1.5.0 COMPONENTS program_options REQUIRED)
+
+#########################################################
+#Volk 
+######################################################### 
 find_package(Volk REQUIRED)
 
+#########################################################
+#fftw    
+#########################################################
 FIND_PATH(
     FFTW3F_INCLUDE_DIRS
     NAMES fftw3.h
@@ -48,10 +54,9 @@ FIND_LIBRARY(
           /usr/lib64
 )
 
-
-# FIND_LIBRARY(FFTW3_LIBRARIES NAMES fftw3f libfftw3f.so PATHS /usr/lib/x86_64-linux-gnu /usr/include)
-
+#########################################################
 #libusb bullshit    
+#########################################################
 IF (NOT WIN32)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
@@ -75,10 +80,14 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBUSB DEFAULT_MSG LIBUSB_LIBRARIES LIBUSB_INC
 
 MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
 
+#########################################################
+## Target the libraries
+#########################################################
 target_link_libraries(radar PUBLIC
   ${Boost_LIBRARIES}
   ${VOLK_LIBRARIES}
   ${LIBUSB_LIBRARIES}
   ${FFTW3F_LIBRARIES}
   -lpthread
+  -lpython2.7
  ) 

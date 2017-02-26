@@ -67,20 +67,23 @@ void sched::init()
   if (result != HACKRF_SUCCESS){
     std::cout << "No device found...stopping..." << std::endl;
     std::exit(-1);
+  }else{
+    std::cout << "Found hackrf" << std::endl;
   }
   
   result = hackrf_open(&hackrf);
   if (result != HACKRF_SUCCESS){
     std::cout << "Failed to open the device...stopping..." << std::endl;
     std::exit(-1);
+  }else{
+    std::cout << "opened hackrf" << std::endl;
   }
   
   //set up device front end
   result = set_up_device(this->frontEnd,hackrf);
   if (result == -1){std::cout << "Device set up failed" << std::endl;std::exit(-1);}
   std::cout << "Return from device setup: " << result << std::endl;
-  
-  
+
   pro->init(10000,10000);
 }
 

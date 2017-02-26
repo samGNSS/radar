@@ -1,30 +1,19 @@
 #ifndef __HACKRF_PROC_H__
 #define __HACKRF_PROC_H__
 
-#include <fstream>
-
-#include "driver/hackrf.h"
-#include "../../util/radarDataTypes.h"
-#include "../../util/math/volk_math.h"
-#include "../../signal_processing/fft.h"
-#include "../../signal_processing/correlator.h"
-#include "../../signal_processing/cfar.h"
 
 #include <atomic>
+#include <fstream>
 #include <thread>
 #include <vector>
 
-//this one will be more complicated. Basic execution flow
-/*
- * init
- * rx_monitor -> wait for samples, when obtained set a flag
- * signal_int -> spin lock, wait for rx_monitor //signal_int and corr_proc need to be very fast so we don't drop samples
- * corr_proc  -> spin lock, wait for signal_int
- * 
- * 
- * the others will be built up over a given time interval
- */
-
+#include "../../signal_processing/correlator.h"
+#include "../../signal_processing/cfar.h"
+#include "../../signal_processing/fft.h"
+#include "driver/hackrf.h"
+#include "../../util/radarDataTypes.h"
+#include "../../util/plotting/plot.h"
+#include "../../util/math/volk_math.h"
 
 namespace hackrf{
 class proc{
@@ -62,11 +51,15 @@ class proc{
     std::vector<radar::charBuffPtr> charBuffs;
     std::vector<radar::complexFloatBuffPtr> floatBuffs,fftBuffs;
     
+    std::vector<std::shared_ptr<float>> absBuffs;
+    
     std::atomic<bool> buffRdy,corrRdy,specRdy,enabled;
     
     
     int buffNum;
     int buffLen;
+    
+    util::plot* plothandler;
   };
 }
 #endif

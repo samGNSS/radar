@@ -1,0 +1,12 @@
+set(MGL_QT5_LIBS_FIND Core Gui Widgets PrintSupport OpenGL)
+
+foreach(mgl_qt5_lib ${MGL_QT5_LIBS_FIND})
+	set(MGL_QT5_LIBS ${MGL_QT5_LIBS} Qt5::${mgl_qt5_lib})
+	find_package(Qt5${mgl_qt5_lib} REQUIRED)
+	if(NOT Qt5${mgl_qt5_lib}_FOUND)
+		message(SEND_ERROR "Couldn't find Qt5 ${mgl_qt5_lib} library.")
+	endif(NOT Qt5${mgl_qt5_lib}_FOUND)
+endforeach(mgl_qt5_lib)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)

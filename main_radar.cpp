@@ -1,16 +1,16 @@
 #include <iostream>
-#include <fstream>
-#include <complex>
-#include <boost/program_options.hpp>
-#include <thread>
-#include <fftw3.h>
+#include <vector>
 
-#include "src/waveform/LFM.h"
-#include "src/hardware/hackrf/scheduler.h"
+#include <boost/program_options.hpp>
+
 #include "src/hardware/hackrf/driver/device_setup.h"
+#include "src/waveform/LFM.h"
+#include "src/util/plotting/matplotlibcpp.h"
 #include "src/util/radarDataTypes.h"
+#include "src/hardware/hackrf/scheduler.h"
 
 namespace po = boost::program_options;
+namespace plt = matplotlibcpp;
 using namespace radar;
 int main(int argc, char **argv) {
     //variables to be set by po
@@ -49,5 +49,25 @@ int main(int argc, char **argv) {
 
     usleep(3000000);
     radarSched->~sched();
+								 
+    //test the plotting
+//     std::vector<float> x = {1,2,3,4};
+//     std::vector<float> y = {4,3,2,1};
+//     plt::interactive(1);
+//     plt::figure();
+//     plt::xlabel("x-axis");
+//     plt::ylabel("y-axis");
+//     plt::title("title");
+//     plt::plot(x,y);
+//     y = {1,2,2,3};
+// //     plt::figure();
+// //     sleep(5);
+//     plt::plot(x,y);
+//     plt::figure();
+//     int stop = 0;
+//     while(stop >= 0){
+//       std::cout << "Enter (-1) to quit: " << std::endl;
+//       std::cin >> stop;
+//     }    
     return 0;
 }
