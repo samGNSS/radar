@@ -33,9 +33,9 @@ void LFM::genWave(){
 }
 
 complexFloatBuffPtr LFM::getFloatBuff(){
-     return std::make_shared<complexFloat>(*waveBuff);
+     return waveBuff;
 }
 
 charBuffPtr LFM::getCharBuff(){
-    return std::make_shared<charBuff>(*charWave);
+    return charWave;
 }

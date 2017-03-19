@@ -37,8 +37,8 @@ void math::magSqrd(radar::complexFloat* input,float* output){
 }
 
 void math::multiply(radar::complexFloat* input1,radar::complexFloat* input2, radar::complexFloat* output){
-  volk_32fc_x2_multiply_32fc(internalComplexFloatBuff,input1,input2,buffSize);
-  std::memcpy(output,internalComplexFloatBuff,buffSize*sizeof(radar::complexFloat));
+  volk_32fc_x2_multiply_32fc(output,input1,input2,buffSize);
+//   std::memcpy(output,internalComplexFloatBuff,buffSize*sizeof(radar::complexFloat));
 }
 
 void math::initFilter(float* taps, int tapsSize){

@@ -2,7 +2,7 @@
 
 #include <cstring>
 #include <memory>
-
+#include <volk/volk.h>
 
 #include "../util/radarDataTypes.h"
 
@@ -27,12 +27,13 @@ tuneFilter::tuneFilter(std::vector<float> &taps_, float frequencyOffset, float s
 
 tuneFilter::~tuneFilter(){
   delete[] taps;
+  delete mathHandle;
 }
 
 void tuneFilter::timeFilterTune(radar::complexFloat* iqInput, radar::complexFloat* filteredOutput){
   //frequency translate
   mathHandle->multiply(expTable.get(),iqInput,filteredOutput);
-  mathHandle->filter(filteredOutput,filteredOutput);
+  mathHandle->filter(iqInput,filteredOutput);
 }
 
 

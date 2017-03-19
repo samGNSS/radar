@@ -4,6 +4,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O4 -std=c++11 -Wall")
 file(GLOB_RECURSE sources ./src/*.cpp ./src/*.c ./src/*.h)
  
 add_executable(radar main_radar.cpp ${sources})
+add_executable(filter_timing_test ./profiling/main_filter_timing.cpp ${sources})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
@@ -84,6 +85,15 @@ MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
 ## Target the libraries
 #########################################################
 target_link_libraries(radar PUBLIC
+  ${Boost_LIBRARIES}
+  ${VOLK_LIBRARIES}
+  ${LIBUSB_LIBRARIES}
+  ${FFTW3F_LIBRARIES}
+  -lpthread
+  -lpython2.7
+ ) 
+ 
+ target_link_libraries(filter_timing_test PUBLIC
   ${Boost_LIBRARIES}
   ${VOLK_LIBRARIES}
   ${LIBUSB_LIBRARIES}
