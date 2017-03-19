@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 	("rxVgaGain", po::value<uint32_t>(&rxVgaGain)->default_value(8), "rx gain")
 	("rxLnaGain", po::value<uint32_t>(&rxLnaGain)->default_value(8), "rx lna gain")
 	("txVgaGain", po::value<uint32_t>(&txVgaGain)->default_value(32), "tx gain")
-	("centerFreq", po::value<uint64_t>(&centerFreq)->default_value(2.45e9), "center frequency (Hz)")
+	("centerFreq", po::value<uint64_t>(&centerFreq)->default_value(94.3e6), "center frequency (Hz)")
     ;
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -48,8 +48,7 @@ int main(int argc, char **argv) {
     radarSched->start(); 
 
     usleep(3000000);
-    radarSched->~sched();
-								 
+    delete radarSched;
     //test the plotting
 //     std::vector<float> x = {1,2,3,4};
 //     std::vector<float> y = {4,3,2,1};

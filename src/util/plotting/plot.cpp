@@ -14,7 +14,7 @@ util::plot::plot(int buffLength_):buffLength(buffLength_){};
  * Destructor
  */
 util::plot::~plot(){
-  clearVector();
+//   clearVector();
 };
 
 /*
@@ -36,11 +36,13 @@ void util::plot::plot2d(float* xData,float* yData){
   std::cout << "Plotting abs(FFT)" << std::endl;
   makeVector(yData,nullptr,1);
   std::cout << "making call to matplotlib.pyplot.plot" << std::endl;
-
+  std::cout << "**** plot.cpp | plot2d : floatVec size is " << floatVec.size() << " ****" << std::endl;
+  std::cout << "**** plot.cpp | plot2d : data size is " << floatVec[0].size() << " ****" << std::endl;
   //call plotting
-  plt::plot(floatVec[1],floatVec[1]);
+  plt::plot(floatVec[0],"g-");
   std::cout << "saving plot" << std::endl;
   plt::save("./plot_test.png");
+  clearVector();
 };
 
 /*
@@ -66,7 +68,9 @@ void util::plot::makeVector(float* floatData, radar::complexFloat* complexData, 
     case 1:
     {
       //float
-      floatVec.push_back(std::vector<float>(buffLength));
+      floatVec.push_back(std::vector<float>(buffLength,0));
+      std::cout << "**** plot.cpp : floatVec size is " << floatVec.size() << " ****" << std::endl;
+      std::cout << "**** plot.cpp : data size is " << floatVec[0].size() << " ****" << std::endl;
       int index = floatVec.size() -1;
       for(int i=0;i<buffLength;i++)
 	floatVec.at(index)[i] = floatData[i];
@@ -75,7 +79,7 @@ void util::plot::makeVector(float* floatData, radar::complexFloat* complexData, 
     case 2:
     {
       //complex
-      complexFloatVec.push_back(std::vector<radar::complexFloat>(buffLength));
+      complexFloatVec.push_back(std::vector<radar::complexFloat>(buffLength,0));
       int index = complexFloatVec.size() -1;
       for(int i=0;i<buffLength;i++)
 	complexFloatVec.at(index)[i] = complexData[i];

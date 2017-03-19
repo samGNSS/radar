@@ -128,7 +128,7 @@ void sched::stop()
 void sched::tx_callback_control()
 {
   while(enabled){
-    while(!transmitting){usleep(1);}; //spin lock, wait transmit signal 
+    while(!transmitting.load()){usleep(1);}; //spin lock, wait transmit signal 
     std::this_thread::sleep_for(std::chrono::seconds(1));
     switch_rx_tx(); //start receiving
   }
@@ -147,7 +147,7 @@ int sched::tx_callback(hackrf_transfer* transfer)
 void sched::rx_callback_control()
 {
   while(enabled){
-    while(transmitting){usleep(1);}; //spin lock
+    while(transmitting.load()){usleep(1);}; //spin lock
     std::this_thread::sleep_for(std::chrono::seconds(1));
     
     //check for new buffer
@@ -190,9 +190,9 @@ void sched::reopen_device(){
 void sched::switch_rx_tx()
 {
   //switch 
-  transmitting = !transmitting;
+  transmitting.store(!transmitting.load());
   //need to make calls to the hackrf driver to stop rx/tx and start the other one
-  if(!transmitting){
+  if(!transmitting.load()){
     //might drop samples...
     hackrf_stop_tx(hackrf);
     std::cout << "Stopped tx" << std::endl;

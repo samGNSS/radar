@@ -30,6 +30,8 @@ private:
     
     float startFreq;
     float rate;
+    float PI_PI = 6.283185307179586;
+
 };
 
 #endif

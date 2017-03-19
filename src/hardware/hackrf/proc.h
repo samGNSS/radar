@@ -13,6 +13,7 @@
 #include "driver/hackrf.h"
 #include "../../util/radarDataTypes.h"
 #include "../../util/plotting/plot.h"
+#include "../../signal_processing/tuneFilter.h"
 #include "../../util/math/volk_math.h"
 
 namespace hackrf{
@@ -41,6 +42,7 @@ class proc{
     //signal processing classes
     FFT* fftProc; 
     math* simdMath;
+    tuneFilter* filt;
     
     //threads
     std::thread corrThread; //runs the correlator
@@ -52,6 +54,7 @@ class proc{
     std::vector<radar::complexFloatBuffPtr> floatBuffs,fftBuffs;
     
     std::vector<std::shared_ptr<float>> absBuffs;
+    std::vector<float> taps;
     
     std::atomic<bool> buffRdy,corrRdy,specRdy,enabled;
     

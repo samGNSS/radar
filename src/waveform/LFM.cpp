@@ -1,7 +1,7 @@
 #include "LFM.h"
 #include <iostream>
 
-#define PI_PI 6.283185307179586 //two pi
+// #define PI_PI 6.283185307179586 //two pi
 
 /*
  * TODO

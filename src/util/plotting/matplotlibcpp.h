@@ -254,28 +254,28 @@ namespace matplotlibcpp {
 	template<typename NumericX, typename NumericY>
 	bool plot(const std::vector<NumericX>& x, const std::vector<NumericY>& y, const std::string& s = "")
 	{
-		assert(x.size() == y.size());
+	  assert(x.size() == y.size());
+	  PyObject* xlist = PyList_New(x.size());
+	  PyObject* ylist = PyList_New(y.size());
+	  PyObject* pystring = PyString_FromString(s.c_str());
 
-		PyObject* xlist = PyList_New(x.size());
-		PyObject* ylist = PyList_New(y.size());
-		PyObject* pystring = PyString_FromString(s.c_str());
+	  std::cout << "allocating python list" << std::endl;
+	  for(size_t i = 0; i < x.size(); i++) {
+		  PyList_SetItem(xlist, i, PyFloat_FromDouble(x.at(i)));
+		  PyList_SetItem(ylist, i, PyFloat_FromDouble(y.at(i)));
+	  }
+	  std::cout << "done allocating python list" << std::endl;
+	  PyObject* plot_args = PyTuple_New(3);
+	  PyTuple_SetItem(plot_args, 0, xlist);
+	  PyTuple_SetItem(plot_args, 1, ylist);
+	  PyTuple_SetItem(plot_args, 2, pystring);
 
-		for(size_t i = 0; i < x.size(); ++i) {
-			PyList_SetItem(xlist, i, PyFloat_FromDouble(x.at(i)));
-			PyList_SetItem(ylist, i, PyFloat_FromDouble(y.at(i)));
-		}
+	  PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_plot, plot_args);
 
-		PyObject* plot_args = PyTuple_New(3);
-		PyTuple_SetItem(plot_args, 0, xlist);
-		PyTuple_SetItem(plot_args, 1, ylist);
-		PyTuple_SetItem(plot_args, 2, pystring);
+	  Py_DECREF(plot_args);
+	  if(res) Py_DECREF(res);
 
-		PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_plot, plot_args);
-
-		Py_DECREF(plot_args);
-		if(res) Py_DECREF(res);
-
-		return res;
+	  return res;
 	}
 
 	template<typename NumericX, typename NumericY>

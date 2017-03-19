@@ -36,3 +36,6 @@ void FFT::getIFFT(radar::complexFloat* input, radar::complexFloat* output){
   return;
 };
 
+void FFT::setWindow(){
+  //TODO: add windowing to the FFT
+};

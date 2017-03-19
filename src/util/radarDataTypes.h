@@ -13,7 +13,7 @@ namespace radar{
     typedef uint8_t charBuff;
     
     typedef std::shared_ptr<complexFloat> complexFloatBuffPtr;
-    typedef std::shared_ptr<charBuff> charBuffPtr;   
+    typedef std::shared_ptr<charBuff> charBuffPtr;
 };
 
 
