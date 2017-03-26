@@ -21,8 +21,7 @@ radar::charBuff* sched::rx_buff;
 std::atomic<bool> sched::newBuff;
 proc* sched::pro;
 
-sched::sched(const device_params* device_options)
-{
+sched::sched(const device_params* device_options){
   //TODO: add ability to specify number of IQ buffers
   tx_wave.resize(1);
   
@@ -40,8 +39,7 @@ sched::sched(const device_params* device_options)
   pro = new proc("proc.bin","proc.bin","proc.bin");
 }
 
-sched::~sched()
-{
+sched::~sched(){
   std::cout << "::STOPPING RADAR::" << std::endl;
 
   //check threads have joined 
@@ -58,8 +56,7 @@ sched::~sched()
 }
 
 //init hardware
-void sched::init()
-{ 
+void sched::init(){ 
   std::cout << "In init" << std::endl;
 
   //enable and check the hardware
@@ -88,8 +85,7 @@ void sched::init()
 }
 
 //start hardware
-void sched::start()
-{
+void sched::start(){
   //things
   //start all threads
   //thread execution will be controlled with spin locks and atomic variables 
@@ -116,8 +112,7 @@ void sched::start()
 
 
 //stop hardware
-void sched::stop()
-{
+void sched::stop(){
   //join threads
   enabled = false;
   rx_thread.join();
@@ -125,8 +120,7 @@ void sched::stop()
 }
 
 //---------------------Transmitter-------------------------
-void sched::tx_callback_control()
-{
+void sched::tx_callback_control(){
   while(enabled){
     while(!transmitting.load()){usleep(1);}; //spin lock, wait transmit signal 
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -134,8 +128,7 @@ void sched::tx_callback_control()
   }
 }
 
-int sched::tx_callback(hackrf_transfer* transfer)
-{
+int sched::tx_callback(hackrf_transfer* transfer){
 //   std::cout << "In tx_callback" << std::endl;
   int numSamps = transfer->valid_length < 10000 ? transfer->valid_length : 10000;
   std::memcpy(&transfer->buffer[0],tx_wave[0].get(),numSamps);
@@ -144,8 +137,7 @@ int sched::tx_callback(hackrf_transfer* transfer)
 
 
 //---------------------Receiver-------------------------
-void sched::rx_callback_control()
-{
+void sched::rx_callback_control(){
   while(enabled){
     while(transmitting.load()){usleep(1);}; //spin lock
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -159,8 +151,7 @@ void sched::rx_callback_control()
   }
 }
 
-int sched::rx_callback(hackrf_transfer* transfer)
-{
+int sched::rx_callback(hackrf_transfer* transfer){
   //do stuff
   std::cout << "In rx_callback" << std::endl;
   
@@ -187,8 +178,7 @@ void sched::reopen_device(){
   };
 }
 
-void sched::switch_rx_tx()
-{
+void sched::switch_rx_tx(){
   //switch 
   transmitting.store(!transmitting.load());
   //need to make calls to the hackrf driver to stop rx/tx and start the other one

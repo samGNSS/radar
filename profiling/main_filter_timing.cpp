@@ -20,70 +20,122 @@ int main(){
   int numIter = 1000;
   std::vector<float> data(numIter,0);
   std::vector<float> data2(numIter,0);
+  std::vector<float> data3(numIter,0);
+  std::vector<float> data4(10000,0);
   
-  {
+//   {
+//     //filter object
+//     tuneFilter* filt = new tuneFilter(taps,5000000, 10000000.0, 10000);
+// 
+//     //data
+//     LFM* waveGen = new LFM(10000000.0, //sample rate
+// 		      (int) 10000,                      //number of samples
+// 		      (float) 50000,                    //bandwidth
+// 		      (float) 100000);                  //center frequency
+//     waveGen->genWave();
+//     radar::complexFloatBuffPtr tx_wave = waveGen->getFloatBuff();
+//   
+//     
+//     //run tests
+//     for(int i = 0;i<numIter;i++){
+//       auto start = std::chrono::system_clock::now();
+//       filt->timeFilterTune(tx_wave.get(),tx_wave.get());
+//       auto duration = std::chrono::duration_cast<
+//       std::chrono::duration<float> >(std::chrono::system_clock::now() - start);
+//       data[i] = (duration.count());
+//     }
+//     
+//     delete filt;
+//     delete waveGen;
+//     
+//   }
+//   
+//   
+//   {
+//     //filter object
+//     tuneFilter* filt = new tuneFilter(taps,5000000, 10000000.0, 100000);
+// 
+//     //data
+//     LFM* waveGen = new LFM(10000000.0, //sample rate
+// 		      (int) 100000,                      //number of samples
+// 		      (float) 50000,                    //bandwidth
+// 		      (float) 100000);                  //center frequency
+//     waveGen->genWave();
+//     radar::complexFloatBuffPtr tx_wave = waveGen->getFloatBuff();
+//   
+//     
+//     //run tests
+//     for(int i = 0;i<numIter;i++){
+//       auto start = std::chrono::system_clock::now();
+//       filt->timeFilterTune(tx_wave.get(),tx_wave.get());
+//       auto duration = std::chrono::duration_cast<
+//       std::chrono::duration<float> >(std::chrono::system_clock::now() - start);
+//       data2[i] = (duration.count());
+//     }
+//     
+//     delete filt;
+//     delete waveGen;
+//     
+//   }
+
+  
+//     {
     //filter object
     tuneFilter* filt = new tuneFilter(taps,5000000, 10000000.0, 10000);
 
     //data
-    LFM* waveGen = new LFM(10000000.0, //sample rate
-		      (int) 10000,                      //number of samples
-		      (float) 50000,                    //bandwidth
-		      (float) 100000);                  //center frequency
-    waveGen->genWave();
-    radar::complexFloatBuffPtr tx_wave = waveGen->getFloatBuff();
-  
-    
-    //run tests
-    for(int i = 0;i<numIter;i++){
-      auto start = std::chrono::system_clock::now();
-      filt->timeFilterTune(tx_wave.get(),tx_wave.get());
-      auto duration = std::chrono::duration_cast<
-      std::chrono::duration<float> >(std::chrono::system_clock::now() - start);
-      data[i] = (duration.count());
+    radar::complexFloatBuffPtr  expTable = std::shared_ptr<radar::complexFloat>(new radar::complexFloat[10000],std::default_delete<radar::complexFloat[]>());
+    radar::complexFloatBuffPtr  fftTable = std::shared_ptr<radar::complexFloat>(new radar::complexFloat[10000],std::default_delete<radar::complexFloat[]>());
+    radar::complexFloatBuffPtr  outTable = std::shared_ptr<radar::complexFloat>(new radar::complexFloat[10000],std::default_delete<radar::complexFloat[]>());
+
+    for(int i = 0;i<10000;++i){
+      float arg = 6.283185307179586*100000*i/10000000.0;
+      expTable.get()[i] = radar::complexFloat(std::cos(arg),std::sin(arg));
     }
     
-    delete filt;
-    delete waveGen;
-    
-  }
-  
-  
-  {
-    //filter object
-    tuneFilter* filt = new tuneFilter(taps,5000000, 10000000.0, 100000);
-
-    //data
-    LFM* waveGen = new LFM(10000000.0, //sample rate
-		      (int) 100000,                      //number of samples
-		      (float) 50000,                    //bandwidth
-		      (float) 100000);                  //center frequency
-    waveGen->genWave();
-    radar::complexFloatBuffPtr tx_wave = waveGen->getFloatBuff();
-  
+    //get fft
+    FFT* localFFT = new FFT(10000,10000);
+    localFFT->getFFT(expTable.get(),fftTable.get());
     
     //run tests
-    for(int i = 0;i<numIter;i++){
+//     for(int i = 0;i<numIter;i++){
       auto start = std::chrono::system_clock::now();
-      filt->timeFilterTune(tx_wave.get(),tx_wave.get());
+      filt->fftFilterTune(fftTable.get());
       auto duration = std::chrono::duration_cast<
       std::chrono::duration<float> >(std::chrono::system_clock::now() - start);
-      data2[i] = (duration.count());
-    }
+//       data3[i] = (duration.count());
+//     }
     
     delete filt;
-    delete waveGen;
+    delete localFFT;
+//   }
+  
+  
+//     plt::figure();
+//     plt::xlabel("Iteration");
+//     plt::ylabel("Time (s)");
+//     plt::title("30 Tap FIR filter run times");
+//     plt::plot(data,"-b*");
+//     plt::plot(data2,"-g*");
+//     plt::plot(data3,"-r*");
+//     plt::legend("10000 samples","100000 samples");
     
-  }
-
-  
-  
+    
+    for(int i=0;i<10000;++i){
+      float r = fftTable.get()[i].real();
+      float j = fftTable.get()[i].imag();
+//       std::cout << outTable.get()[i] << std::endl;
+      data4[i] = r*r + j*j;
+    }
+    
+    
     plt::figure();
-    plt::xlabel("interation");
-    plt::ylabel("time (s)");
-    plt::title("Filter run time");
-    plt::plot(data,"-b*");
-    plt::plot(data2,"-g*");
+    plt::xlabel("fft bin");
+    plt::ylabel("amp");
+    plt::title("FFT");
+    plt::plot(data4,"-r*");
+    
+    
     plt::show();
   
   

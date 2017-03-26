@@ -13,6 +13,7 @@ public:
   void magSqrd(radar::complexFloat* input,float* output);
   void add_const(radar::complexFloat* input,float addConst);
   void multiply(radar::complexFloat* input1,radar::complexFloat* input2, radar::complexFloat* output);
+  void multiply(radar::complexFloat* input1,radar::complexFloat* input2, radar::complexFloat* output,int numSamps);
   void abs(radar::complexFloat* input,float* output);
   void filter(radar::complexFloat* input, radar::complexFloat* output);
   void initFilter(float* taps, int tapsSize);

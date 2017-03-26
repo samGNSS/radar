@@ -259,12 +259,11 @@ namespace matplotlibcpp {
 	  PyObject* ylist = PyList_New(y.size());
 	  PyObject* pystring = PyString_FromString(s.c_str());
 
-	  std::cout << "allocating python list" << std::endl;
 	  for(size_t i = 0; i < x.size(); i++) {
 		  PyList_SetItem(xlist, i, PyFloat_FromDouble(x.at(i)));
 		  PyList_SetItem(ylist, i, PyFloat_FromDouble(y.at(i)));
 	  }
-	  std::cout << "done allocating python list" << std::endl;
+
 	  PyObject* plot_args = PyTuple_New(3);
 	  PyTuple_SetItem(plot_args, 0, xlist);
 	  PyTuple_SetItem(plot_args, 1, ylist);
@@ -389,9 +388,16 @@ namespace matplotlibcpp {
 		Py_DECREF(res);
 	}
 
-	inline void legend()
+	inline void legend(const std::string& arg1,const std::string& arg2)
 	{
-		PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_legend, detail::_interpreter::get().s_python_empty_tuple);
+		PyObject* pyarg1str = PyString_FromString(arg1.c_str());
+		PyObject* pyarg2str = PyString_FromString(arg2.c_str());
+		PyObject* args = PyTuple_New(2);
+		PyTuple_SetItem(args, 0, pyarg1str);
+		PyTuple_SetItem(args, 1, pyarg2str);
+		
+		PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_legend, args);
+// 		PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_legend, detail::_interpreter::get().s_python_empty_tuple);
 		if(!res) throw std::runtime_error("Call to legend() failed.");
 
 		Py_DECREF(res);

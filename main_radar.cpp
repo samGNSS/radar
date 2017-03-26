@@ -48,25 +48,7 @@ int main(int argc, char **argv) {
     radarSched->start(); 
 
     usleep(3000000);
-    delete radarSched;
-    //test the plotting
-//     std::vector<float> x = {1,2,3,4};
-//     std::vector<float> y = {4,3,2,1};
-//     plt::interactive(1);
-//     plt::figure();
-//     plt::xlabel("x-axis");
-//     plt::ylabel("y-axis");
-//     plt::title("title");
-//     plt::plot(x,y);
-//     y = {1,2,2,3};
-// //     plt::figure();
-// //     sleep(5);
-//     plt::plot(x,y);
-//     plt::figure();
-//     int stop = 0;
-//     while(stop >= 0){
-//       std::cout << "Enter (-1) to quit: " << std::endl;
-//       std::cin >> stop;
-//     }    
+    
+    delete radarSched;  
     return 0;
 }

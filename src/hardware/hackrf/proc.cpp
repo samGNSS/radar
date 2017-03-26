@@ -116,12 +116,12 @@ void proc::signal_int()
       floatBuffs[buffNum].get()[j] /= 128;
       floatBuffs[buffNum].get()[j] -= radar::complexFloat(1,1);
     }
-    //tune filter
-    filt->timeFilterTune(floatBuffs[buffNum].get(),floatBuffs[buffNum].get());
-    std::cout << "**** proc.cpp | signal_int: filtered data ****" << std::endl;
     
     //get fft
     fftProc->getFFT(floatBuffs[buffNum].get(),fftBuffs[buffNum].get());
+    //tune filter
+    filt->fftFilterTune(fftBuffs[buffNum].get());
+    std::cout << "**** proc.cpp | signal_int: filtered data ****" << std::endl;
     simdMath->abs(fftBuffs[buffNum].get(),absBuffs[buffNum].get()); //get magnitude of fft
 
     //*******************************************

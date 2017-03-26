@@ -1,5 +1,6 @@
 #include "volk_math.h"
 
+#include <iostream>
 #include <cstring>
 #include <volk/volk.h>
 
@@ -41,6 +42,10 @@ void math::multiply(radar::complexFloat* input1,radar::complexFloat* input2, rad
 //   std::memcpy(output,internalComplexFloatBuff,buffSize*sizeof(radar::complexFloat));
 }
 
+void math::multiply(radar::complexFloat* input1,radar::complexFloat* input2, radar::complexFloat* output,int numSamps){
+  volk_32fc_x2_multiply_32fc(output,input1,input2,numSamps);
+}
+
 void math::initFilter(float* taps, int tapsSize){
   if(!filterInit){
     filterInit = true;
@@ -73,14 +78,13 @@ void math::initFilter(float* taps, int tapsSize){
 
 void math::filter(radar::complexFloat* input, radar::complexFloat* output){
   //linear covolution
-  int i = 0;
-  for(;i<buffSize;i++){
+  for(int i = 0;i<buffSize;++i){
     //run through accumelator
     internalFilterHistory[0] = input[i];
     volk_32fc_32f_dot_prod_32fc(&output[i],internalFilterHistory,aligned_taps,numTaps);
     
     //roll filter history
-    std::memcpy(&internalFilterHistory[1],&internalFilterHistory[0],(numTaps-1)*sizeof(radar::complexFloat));
+    std::memmove(&internalFilterHistory[1],&internalFilterHistory[0],(numTaps-1)*sizeof(radar::complexFloat));
   }
   //done filtering, zero out the history. This is done because the inputs to this function are not time aligned
   std::memcpy(internalFilterHistory,complexZeros,(numTaps)*sizeof(radar::complexFloat));

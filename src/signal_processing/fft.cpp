@@ -10,7 +10,11 @@ FFT::FFT(int fftSize,int inputSize):fftSize(fftSize){
   fftwf_free(tmp);
 };
 
-FFT::~FFT(){fftwf_free(outputMem);};
+FFT::~FFT(){
+  fftwf_free(outputMem);
+  fftwf_destroy_plan(forwardDFT);
+  fftwf_destroy_plan(inverseDFT);
+};
 
 void FFT::resetFFTSize(int fftSize,int inputSize){
   this->fftSize = fftSize;
@@ -26,14 +30,12 @@ void FFT::getFFT(radar::complexFloat* input, radar::complexFloat* output){
   fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input);
   fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output);
   fftwf_execute_dft(forwardDFT,inputTMP,outputTMP);
-  return;
 };
 
 void FFT::getIFFT(radar::complexFloat* input, radar::complexFloat* output){
   fftwf_complex* inputTMP = reinterpret_cast<fftwf_complex*>(input);
   fftwf_complex* outputTMP = reinterpret_cast<fftwf_complex*>(output);
-  fftwf_execute_dft(forwardDFT,inputTMP,outputTMP);
-  return;
+  fftwf_execute_dft(inverseDFT,inputTMP,outputTMP);
 };
 
 void FFT::setWindow(){

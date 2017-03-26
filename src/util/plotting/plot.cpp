@@ -72,7 +72,7 @@ void util::plot::makeVector(float* floatData, radar::complexFloat* complexData, 
       std::cout << "**** plot.cpp : floatVec size is " << floatVec.size() << " ****" << std::endl;
       std::cout << "**** plot.cpp : data size is " << floatVec[0].size() << " ****" << std::endl;
       int index = floatVec.size() -1;
-      for(int i=0;i<buffLength;i++)
+      for(int i=0;i<buffLength;++i)
 	floatVec.at(index)[i] = floatData[i];
       break;
     }
@@ -81,7 +81,7 @@ void util::plot::makeVector(float* floatData, radar::complexFloat* complexData, 
       //complex
       complexFloatVec.push_back(std::vector<radar::complexFloat>(buffLength,0));
       int index = complexFloatVec.size() -1;
-      for(int i=0;i<buffLength;i++)
+      for(int i=0;i<buffLength;++i)
 	complexFloatVec.at(index)[i] = complexData[i];
       break;
     }
